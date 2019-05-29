@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs';
 
 class Monthly {
    constructor(schema) {

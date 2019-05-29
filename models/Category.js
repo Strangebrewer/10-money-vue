@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs';
 
 class Category {
    constructor(schema) {

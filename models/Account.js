@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs';
 
 class Account {
    constructor(schema) {
@@ -24,7 +23,11 @@ class Account {
 
    async calculateNewBalance(req_body) {
       const account = await this.Account.findById(req_body.account_id);
-      const new_balance = account.balance - req_body.amount;
+      let new_balance;
+      if (req_body.type === 'payment')
+         new_balance = account.balance - req_body.amount;      
+      else new_balance = account.balance + req_body.amount;
+      
       const updated_account = await this.Account.findByIdAndUpdate(req_body.account_id, {
          balance: new_balance,
          $push: { transactions: req_body.transaction_id }

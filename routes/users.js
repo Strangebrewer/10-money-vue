@@ -1,9 +1,9 @@
 import express from 'express';
 const router = express.Router();
-import { passport } from '../passport';
+import isAuthenticated from '../policies/isAuthenticated';
 import * as UserController from '../controllers/UserController';
 
-router.get('/', passport.authenticate('jwt', { session: false }), UserController.getCurrentUser);
+router.get('/', isAuthenticated, UserController.getCurrentUser);
 
 router.post('/register', UserController.register);
 

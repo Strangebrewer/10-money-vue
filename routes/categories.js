@@ -1,15 +1,15 @@
 import express from 'express';
 const router = express.Router();
-import { passport } from '../passport';
+import isAuthenticated from '../policies/isAuthenticated';
 import CategoryController from '../controllers/CategoryController';
 
 router.route('/')
-   .get(passport.authenticate('jwt', { session: false }), CategoryController.index)
-   .post(passport.authenticate('jwt', { session: false }), CategoryController.post)
+   .get(isAuthenticated, CategoryController.index)
+   .post(isAuthenticated, CategoryController.post)
 
 router.route('/:id')
-   .get(passport.authenticate('jwt', { session: false }), CategoryController.index)
-   .put(passport.authenticate('jwt', { session: false }), CategoryController.put)
-   .delete(passport.authenticate('jwt', { session: false }), CategoryController.delete)
+   .get(isAuthenticated, CategoryController.index)
+   .put(isAuthenticated, CategoryController.put)
+   .delete(isAuthenticated, CategoryController.delete)
 
 export default router;

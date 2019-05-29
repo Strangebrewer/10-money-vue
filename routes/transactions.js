@@ -1,15 +1,15 @@
 import express from 'express';
 const router = express.Router();
-import { passport } from '../passport';
+import isAuthenticated from '../policies/isAuthenticated';
 import TransactionController from '../controllers/TransactionController';
 
 router.route('/')
-   .get(passport.authenticate('jwt', { session: false }), TransactionController.index)
-   .post(passport.authenticate('jwt', { session: false }), TransactionController.post)
+   .get(isAuthenticated, TransactionController.index)
+   .post(isAuthenticated, TransactionController.post)
 
 router.route('/:id')
-   .get(passport.authenticate('jwt', { session: false }), TransactionController.index)
-   .put(passport.authenticate('jwt', { session: false }), TransactionController.put)
-   .delete(passport.authenticate('jwt', { session: false }), TransactionController.delete)
+   .get(isAuthenticated, TransactionController.index)
+   .put(isAuthenticated, TransactionController.put)
+   .delete(isAuthenticated, TransactionController.delete)
 
 export default router;
