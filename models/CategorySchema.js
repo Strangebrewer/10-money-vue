@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 const Schema = mongoose.Schema;
 
@@ -8,7 +8,7 @@ const CategorySchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'Transaction'
    }],
-   user_id: { type: Schema.Types.ObjectId, ref: 'User'}
+   user: { type: Schema.Types.ObjectId, ref: 'User'},
 }, { timestamps: true });
 
 export default mongoose.model('Category', CategorySchema);

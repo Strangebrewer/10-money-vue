@@ -1,12 +1,15 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 const Schema = mongoose.Schema;
+
+const tempPw = bcrypt.hashSync('1234', bcrypt.genSaltSync(10), null);
 
 const UserSchema = new Schema({
    username: { type: String, required: true },
    password: { type: String, required: true, default: tempPw },
-   name: { type: String, required: true },
    email: { type: String, required: false },
+   first_name: String,
+   last_name: String,
    accounts: [{
       type: Schema.Types.ObjectId,
       ref: 'Account'
