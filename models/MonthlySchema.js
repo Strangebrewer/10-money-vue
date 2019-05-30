@@ -3,11 +3,8 @@ const Schema = mongoose.Schema;
 
 const MonthlySchema = new Schema({
    name: { type: String, required: true },
+   description: String,
    amount: { type: Number, required: true },
-   transactions: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Transaction'
-   }],
    user: { type: Schema.Types.ObjectId, ref: 'User'},
    due_date: Date
 }, { timestamps: true });

@@ -6,7 +6,8 @@ export default {
 
    async index(req, res) {
       try {
-
+         const categories = await category_model.find(req.params, req.user.id);
+         res.json(categories);
       } catch (e) {
          res.status(500).send({
             error: 'Something went wrong while getting your category(s)'
@@ -16,7 +17,13 @@ export default {
 
    async post(req, res) {
       try {
-
+         const exists = await CategorySchema.findOne({ name: req.body.name });
+         if (exists) {
+            return res.status(400).send({ error: 'That category already exists' });
+         }
+         req.body.user = req.user.id
+         const category = await CategorySchema.create(req.body);
+         res.json(category);
       } catch (e) {
          res.status(500).send({
             error: 'Something went wrong while creating your category'

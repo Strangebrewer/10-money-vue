@@ -4,7 +4,22 @@ const user_model = new User(UserSchema);
 
 export async function getCurrentUser(req, res) {
    try {
+      const user = await UserSchema.findById(req.user.id)
+         .populate('accounts')
+         .populate('monthlies')
+         .populate('categories');
 
+      const {
+         _id, username, email, first_name, last_name,
+         accounts, monthlies, categories
+      } = user;
+
+      const userData = {
+         _id, username, email, first_name, last_name,
+         accounts, monthlies, categories
+      }
+
+      res.json(userData)
    } catch (e) {
       res.status(500).send({
          error: 'Something went wrong while getting user info'
