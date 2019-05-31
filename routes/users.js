@@ -9,4 +9,8 @@ router.post('/register', UserController.register);
 
 router.post('/login', UserController.login);
 
+router.route('/:id')
+   .put(isAuthenticated, UserController.put)
+   .delete(isAuthenticated, UserController.remove)
+
 export default router;

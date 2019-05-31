@@ -47,3 +47,23 @@ export async function login(req, res) {
       })
    }
 }
+
+export async function put(req, res) {
+   try {
+      
+   } catch (e) {
+      res.status(500).send({
+         error: 'Something went wrong during user edit. Please try again.'
+      })
+   }
+}
+
+export async function remove(req, res) {
+   try {
+
+   } catch (e) {
+      res.status(500).send({
+         error: 'Something went wrong during user delete. Please try again.'
+      })
+   }
+}

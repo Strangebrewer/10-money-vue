@@ -33,7 +33,9 @@ export default {
 
    async put(req, res) {
       try {
-
+         const account = await AccountSchema.findByIdAndUpdate(req.params.id, req.body, { new: true });
+         console.log('account in Controller:::', account);
+         res.json(account);
       } catch (e) {
          res.status(500).send({
             error: 'Something went wrong while updating your account'

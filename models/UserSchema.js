@@ -7,7 +7,7 @@ const tempPw = bcrypt.hashSync('1234', bcrypt.genSaltSync(10), null);
 const UserSchema = new Schema({
    username: { type: String, required: true },
    password: { type: String, required: true, default: tempPw },
-   email: { type: String, required: false },
+   email: String,
    first_name: String,
    last_name: String,
    accounts: [{

@@ -8,7 +8,12 @@ const TransactionSchema = new Schema({
    user: { type: Schema.Types.ObjectId, ref: 'User' },
    description: String,
    amount: { type: Number, required: true },
-   type: { type: String, required: true, default: 'expense' },
+   type: {
+      type: String,
+      required: true,
+      default: 'expense',
+      enum: ['expense', 'payment']
+   },
    date: { type: Date, required: true, default: Date.now() }
 }, { timestamps: true });
 

@@ -12,11 +12,11 @@ export default {
 
    async index(req, res) {
       try {
-         const transactions = await transaction_model.find(req.user.id, req.params);
+         const transactions = await transaction_model.findle(req.user.id, req.params);
          res.json(transactions)
       } catch (e) {
          res.status(500).send({
-            error: 'Something went wrong while getting your transaction(s)'
+            error: 'Something went wrong while getting the transaction(s)'
          })
       }
    },
@@ -26,14 +26,11 @@ export default {
          req.body.user = req.user.id;
          const transaction = await TransactionSchema.create(req.body);
          req.body.transaction_id = transaction._id;
-         const updated_account = await account_model.calculateNewBalance(req.body);
-
-         // Do I need to return the transaction or the updated account?
-         // Figure that out when you build the front end...
-         res.json(updated_account);
+         const account = await account_model.calculateNewBalance(req.body);
+         res.send({ account, transaction });
       } catch (e) {
          res.status(500).send({
-            error: 'Something went wrong while creating your transaction'
+            error: 'Something went wrong while creating a transaction'
          })
       }
    },
@@ -43,7 +40,7 @@ export default {
 
       } catch (e) {
          res.status(500).send({
-            error: 'Something went wrong while updating your transaction'
+            error: 'Something went wrong while updating a transaction'
          })
       }
    },
@@ -53,7 +50,7 @@ export default {
 
       } catch (e) {
          res.status(500).send({
-            error: 'Something went wrong while deleting your transaction'
+            error: 'Something went wrong while deleting a transaction'
          })
       }
    }
