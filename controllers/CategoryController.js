@@ -17,12 +17,15 @@ export default {
 
    async post(req, res) {
       try {
-         const exists = await CategorySchema.findOne({ name: req.body.name });
+         const exists = await CategorySchema.findOne({ name: req.body.name, user: req.user.id });
          if (exists) {
             return res.status(400).send({ error: 'That category already exists' });
          }
          req.body.user = req.user.id
          const category = await CategorySchema.create(req.body);
+         await UserSchema.findByIdAndUpdate(req.user.id, {
+            $push: { categories: category._id }
+         })
          res.json(category);
       } catch (e) {
          res.status(500).send({

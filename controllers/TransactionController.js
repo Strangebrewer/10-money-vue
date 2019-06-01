@@ -12,11 +12,11 @@ export default {
 
    async index(req, res) {
       try {
-         const transactions = await transaction_model.findle(req.user.id, req.params);
+         const transactions = await transaction_model.find(req.user.id, req.params);
          res.json(transactions)
       } catch (e) {
          res.status(500).send({
-            error: 'Something went wrong while getting the transaction(s)'
+            error: e.message
          })
       }
    },
@@ -30,27 +30,31 @@ export default {
          res.send({ account, transaction });
       } catch (e) {
          res.status(500).send({
-            error: 'Something went wrong while creating a transaction'
+            error: e.message
          })
       }
    },
 
    async put(req, res) {
       try {
-
+         const transaction = await TransactionSchema.findByIdAndUpdate(req.params.id, req.body, { new: true })
+         res.json(transaction);
       } catch (e) {
          res.status(500).send({
-            error: 'Something went wrong while updating a transaction'
+            error: e.message
          })
       }
    },
 
    async delete(req, res) {
       try {
-
+         const transaction = await TransactionSchema.findById(req.params.id);
+         const account = await account_model.calculatePreviousBalance(transaction);
+         await transaction.remove();
+         res.json(account);
       } catch (e) {
          res.status(500).send({
-            error: 'Something went wrong while deleting a transaction'
+            error: e.message
          })
       }
    }

@@ -1,5 +1,9 @@
 import User from '../models/User';
 import UserSchema from '../models/UserSchema';
+import TransactionSchema from '../models/TransactionSchema';
+import AccountSchema from '../models/AccountSchema';
+import CategorySchema from '../models/CategorySchema';
+import MonthlySchema from '../models/MonthlySchema';
 const user_model = new User(UserSchema);
 
 export async function getCurrentUser(req, res) {
@@ -22,17 +26,18 @@ export async function getCurrentUser(req, res) {
       res.json(userData)
    } catch (e) {
       res.status(500).send({
-         error: 'Something went wrong while getting user info'
+         error: e.message
       })
    }
 }
 
 export async function register(req, res) {
    try {
-
+      const user = await user_model.register(req.body);
+      res.json(user);
    } catch (e) {
-      res.status(500).send({
-         error: 'Something went wrong during registration. Please try again.'
+      res.status(418).send({
+         error: e.message
       })
    }
 }
@@ -42,28 +47,48 @@ export async function login(req, res) {
       const user = await user_model.login(req.body);
       res.json(user);
    } catch (e) {
-      res.status(500).send({
-         error: 'Something went wrong during login. Please try again.'
+      res.status(418).send({
+         error: e.message
       })
    }
 }
 
 export async function put(req, res) {
    try {
-      
+      const user = await user_model.updateUser(req.body, req.params.id);
+      res.json(user)
    } catch (e) {
       res.status(500).send({
-         error: 'Something went wrong during user edit. Please try again.'
+         error: e.message
       })
    }
 }
 
 export async function remove(req, res) {
    try {
+      const user = await UserSchema.findById(req.params.id);
 
+      console.log('user:::', user);
+
+      if (user.accounts.length) {
+         user.accounts.forEach(account_id => {
+            TransactionSchema.deleteMany({ account: account_id });
+         });
+         await AccountSchema.deleteMany({ user: user._id });
+      }
+
+      if (user.categories.length)
+         await CategorySchema.deleteMany({ user: user._id });
+
+      if (user.monthlies.length)
+         await MonthlySchema.deleteMany({ user: user._id });
+
+      await UserSchema.findByIdAndDelete(user._id);
+
+      res.json(user);
    } catch (e) {
       res.status(500).send({
-         error: 'Something went wrong during user delete. Please try again.'
+         error: e.message
       })
    }
 }

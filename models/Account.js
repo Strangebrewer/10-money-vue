@@ -44,6 +44,29 @@ class Account {
       );
       return updated_account;
    }
+
+   async calculatePreviousBalance(transaction) {
+      const account = await this.Account.findById(transaction.account);
+
+      let new_balance;
+      if (transaction.type === 'payment') { // if you're deleting a payment...
+         if (account.type === 'debt') { // and it was a payment towards a debt (e.g. a credit card)...
+            new_balance = account.balance + transaction.amount; // the balance goes back up.
+         } else {                                            // If the account isn't debt, it's holdings...
+            new_balance = account.balance - transaction.amount; // and the balance goes back down.
+         }
+      } else { // if you're not deleting a payment, you're deleting an expense.
+         if (account.type === 'debt') { // If the account is a debt (e.g. Credit Card)...
+            new_balance = account.balance - transaction.amount; // the debt goes back down.
+         } else {                                            // If it's not a debt, it's holdings...
+            new_balance = account.balance + transaction.amount; // and the balance goes back up.
+         }
+      }
+      const updated_account = await this.Account.findByIdAndUpdate(
+         account._id, { balance: new_balance }, { new: true }
+      );
+      return updated_account;
+   }
 }
 
 export default Account;

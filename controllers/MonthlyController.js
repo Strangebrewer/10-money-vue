@@ -17,12 +17,15 @@ export default {
 
    async post(req, res) {
       try {
-         const exists = await MonthlySchema.findOne({ name: req.body.name });
+         const exists = await MonthlySchema.findOne({ name: req.body.name, user: req.user.id });
          if (exists) {
             return res.status(400).send({ error: 'That monthly expense already exists' });
          }
          req.body.user = req.user.id
          const monthly = await MonthlySchema.create(req.body);
+         await UserSchema.findByIdAndUpdate(req.user.id, {
+            $push: { monthlies: monthly._id }
+         });
          res.json(monthly);
       } catch (e) {
          res.status(500).send({

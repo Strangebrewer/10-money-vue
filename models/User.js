@@ -45,46 +45,49 @@ class User {
       return { token, user };
    }
 
-   async updateUser(req_body, req_user) {
-      const { username, email } = req_body;
-      this.validateInputs(username, email);
-      await this.checkUserAvailable(username, email);
+   async updateUser(req_body, user_id) {
+      if (req_body.username || req_body.email) {
+         this.validateInputs(req_body.username, req_body.email);
+         await this.checkUserAvailable(req_body.username, req_body.email);
+      }
 
-      const response = await this.User.findByIdAndUpdate(req_user._id, req_body);
+      const response = await this.User.findByIdAndUpdate(user_id, req_body, { new: true });
 
       const {
          _id, username, email, first_name, last_name,
          accounts, monthlies, categories
       } = response;
-      const token = sign({
-         id: _id,
-         username,
-      });
+
       const user = {
          _id, username, email, first_name, last_name,
          accounts, monthlies, categories
       }
 
-      return { token, user };
+      return user;
    }
 
    async updatePassword(req_body, req_user) {
       const { _id, password } = req_user;
       const { current_password, new_password } = req_body;
       const passwordValid = this.checkPassword(current_password, password);
-      
+
       if (passwordValid) {
-         const pw = hashPassword(new_password);
-         const response = await this.User.findOneAndUpdate({ _id }, { password: pw });
-         const { username } = response;
-         const token = sign({
-            id: _id,
-            username,
-         });
-         const user = { _id, username }
-         return { token, user };
+         const pw = this.hashPassword(new_password);
+         const response = await this.User.findByIdAndUpdate(_id, { password: pw });
+
+         const {
+            _id, username, email, first_name, last_name,
+            accounts, monthlies, categories
+         } = response;
+
+         const user = {
+            _id, username, email, first_name, last_name,
+            accounts, monthlies, categories
+         }
+
+         return user;
       } else {
-         throw new Error('Password is incorrect.')
+         throw new Error('Current password provided is incorrect.')
       }
    }
 
