@@ -11,6 +11,7 @@ export default {
          const accounts = await account_model.find(req.params, req.user.id)
          res.json(accounts);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while getting your account(s)'
          })
@@ -26,6 +27,7 @@ export default {
          })
          res.json(account);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while creating your account'
          })
@@ -37,6 +39,7 @@ export default {
          const account = await AccountSchema.findByIdAndUpdate(req.params.id, req.body, { new: true });
          res.json(account);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while updating your account'
          })
@@ -52,6 +55,7 @@ export default {
          await AccountSchema.findByIdAndDelete(req.params.id);
          res.json(updated_user);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while deleting your account'
          })

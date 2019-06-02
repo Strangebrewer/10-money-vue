@@ -25,6 +25,7 @@ export async function getCurrentUser(req, res) {
 
       res.json(userData);
    } catch (e) {
+      console.log(e);
       res.status(500).send({
          error: e.message
       });
@@ -36,6 +37,7 @@ export async function register(req, res) {
       const user = await user_model.register(req.body);
       res.json(user);
    } catch (e) {
+      console.log(e);
       res.status(418).send({
          error: e.message
       });
@@ -47,6 +49,7 @@ export async function login(req, res) {
       const user = await user_model.login(req.body);
       res.json(user);
    } catch (e) {
+      console.log(e);
       res.status(418).send({
          error: e.message
       });
@@ -58,6 +61,7 @@ export async function put(req, res) {
       const user = await user_model.updateUser(req.body, req.params.id);
       res.json(user);
    } catch (e) {
+      console.log(e);
       res.status(500).send({
          error: e.message
       });
@@ -70,6 +74,7 @@ export async function updatePassword(req, res) {
       const user = await user_model.updatePassword(req.body, req.user);
       res.json(user);
    } catch (e) {
+      console.log(e);
       res.status(500).send({
          error: e.message
       });
@@ -97,6 +102,7 @@ export async function remove(req, res) {
 
       res.json(user);
    } catch (e) {
+      console.log(e);
       res.status(500).send({
          error: e.message
       });

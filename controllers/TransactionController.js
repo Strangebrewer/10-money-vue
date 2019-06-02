@@ -15,6 +15,7 @@ export default {
          const transactions = await transaction_model.find(req.user.id, req.params);
          res.json(transactions)
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: e.message
          })
@@ -29,6 +30,7 @@ export default {
          const account = await account_model.calculateNewBalance(req.body);
          res.send({ account, transaction });
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: e.message
          })
@@ -40,6 +42,7 @@ export default {
          const transaction = await TransactionSchema.findByIdAndUpdate(req.params.id, req.body, { new: true })
          res.json(transaction);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: e.message
          })
@@ -52,6 +55,7 @@ export default {
          const account = await account_model.calculatePreviousBalance(transaction);
          res.json(account);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: e.message
          })

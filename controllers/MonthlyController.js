@@ -11,6 +11,7 @@ export default {
          const monthlies = await monthly_model.find(req.params, req.user.id);
          res.json(monthlies);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while getting your monthly expense(s)'
          })
@@ -30,6 +31,7 @@ export default {
          });
          res.json(monthly);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while creating your monthly expense'
          })
@@ -42,6 +44,7 @@ export default {
          const monthly = await MonthlySchema.findByIdAndUpdate(id, req.body, { new: true })
          res.json(monthly)
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while updating your monthly expense'
          })
@@ -58,6 +61,7 @@ export default {
          await TransactionSchema.updateMany({ monthly }, { monthly: null });
          res.json(user);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while deleting your monthly expense'
          })

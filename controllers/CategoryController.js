@@ -11,6 +11,7 @@ export default {
          const categories = await category_model.find(req.params, req.user.id);
          res.json(categories);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while getting your category(s)'
          })
@@ -30,6 +31,7 @@ export default {
          });
          res.json(category);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while creating your category'
          })
@@ -42,6 +44,7 @@ export default {
          const category = await CategorySchema.findByIdAndUpdate(id, req.body, { new: true });
          res.json(category);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while updating your category'
          })
@@ -59,6 +62,7 @@ export default {
          });
          res.json(user);
       } catch (e) {
+         console.log(e);
          res.status(500).send({
             error: 'Something went wrong while deleting your category'
          })
