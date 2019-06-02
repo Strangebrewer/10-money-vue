@@ -1,7 +1,5 @@
 <template>
 	<b-container class="landing">
-		<b-row>
-			<b-col>
 				<b-jumbotron :header="msg" :lead="lead">
 					<p>For more information visit website</p>
 					<b-button variant="primary" @click="$bvModal.show('modal-scoped')">More Info</b-button>
@@ -11,11 +9,9 @@
                   </template>
                </b-modal>
 				</b-jumbotron>
-			</b-col>
-		</b-row>
 		<b-row>
-			<b-col cols="6">
-				<b-card></b-card>
+			<b-col cols="6" offset="3">
+				<b-card>Sucka Motha Fucka!</b-card>
 			</b-col>
 		</b-row>
 	</b-container>
