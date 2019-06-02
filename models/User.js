@@ -67,13 +67,13 @@ class User {
    }
 
    async updatePassword(req_body, req_user) {
-      const { _id, password } = req_user;
+      const { id, password } = req_user;
       const { current_password, new_password } = req_body;
       const passwordValid = this.checkPassword(current_password, password);
 
       if (passwordValid) {
          const pw = this.hashPassword(new_password);
-         const response = await this.User.findByIdAndUpdate(_id, { password: pw });
+         const response = await this.User.findByIdAndUpdate(id, { password: pw });
 
          const {
             _id, username, email, first_name, last_name,

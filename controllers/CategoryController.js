@@ -1,5 +1,7 @@
 import Category from '../models/Category';
 import CategorySchema from '../models/CategorySchema';
+import TransactionSchema from '../models/TransactionSchema';
+import UserSchema from '../models/UserSchema';
 const category_model = new Category(CategorySchema);
 
 export default {
@@ -25,7 +27,7 @@ export default {
          const category = await CategorySchema.create(req.body);
          await UserSchema.findByIdAndUpdate(req.user.id, {
             $push: { categories: category._id }
-         })
+         });
          res.json(category);
       } catch (e) {
          res.status(500).send({
@@ -36,7 +38,9 @@ export default {
 
    async put(req, res) {
       try {
-
+         const { id } = req.params;
+         const category = await CategorySchema.findByIdAndUpdate(id, req.body, { new: true });
+         res.json(category);
       } catch (e) {
          res.status(500).send({
             error: 'Something went wrong while updating your category'
@@ -46,7 +50,14 @@ export default {
 
    async delete(req, res) {
       try {
-
+         const category = await CategorySchema.findByIdAndDelete(req.params.id);
+         const user = await UserSchema.findByIdAndUpdate(req.user.id, {
+            $pull: { categories: category._id }
+         }, { new: true });
+         await TransactionSchema.updateMany({ category: category._id }, {
+            category: null
+         });
+         res.json(user);
       } catch (e) {
          res.status(500).send({
             error: 'Something went wrong while deleting your category'

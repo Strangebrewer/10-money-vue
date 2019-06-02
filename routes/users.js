@@ -9,6 +9,8 @@ router.post('/register', UserController.register);
 
 router.post('/login', UserController.login);
 
+router.put('/password', isAuthenticated, UserController.updatePassword)
+
 router.route('/:id')
    .put(isAuthenticated, UserController.put)
    .delete(isAuthenticated, UserController.remove)

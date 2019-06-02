@@ -48,9 +48,8 @@ export default {
 
    async delete(req, res) {
       try {
-         const transaction = await TransactionSchema.findById(req.params.id);
+         const transaction = await TransactionSchema.findByIdAndDelete(req.params.id);
          const account = await account_model.calculatePreviousBalance(transaction);
-         await transaction.remove();
          res.json(account);
       } catch (e) {
          res.status(500).send({

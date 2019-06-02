@@ -23,11 +23,11 @@ export async function getCurrentUser(req, res) {
          accounts, monthlies, categories
       }
 
-      res.json(userData)
+      res.json(userData);
    } catch (e) {
       res.status(500).send({
          error: e.message
-      })
+      });
    }
 }
 
@@ -38,7 +38,7 @@ export async function register(req, res) {
    } catch (e) {
       res.status(418).send({
          error: e.message
-      })
+      });
    }
 }
 
@@ -49,26 +49,36 @@ export async function login(req, res) {
    } catch (e) {
       res.status(418).send({
          error: e.message
-      })
+      });
    }
 }
 
 export async function put(req, res) {
    try {
       const user = await user_model.updateUser(req.body, req.params.id);
-      res.json(user)
+      res.json(user);
    } catch (e) {
       res.status(500).send({
          error: e.message
-      })
+      });
+   }
+}
+
+export async function updatePassword(req, res) {
+   console.log('req.user:::', req.user);
+   try {
+      const user = await user_model.updatePassword(req.body, req.user);
+      res.json(user);
+   } catch (e) {
+      res.status(500).send({
+         error: e.message
+      });
    }
 }
 
 export async function remove(req, res) {
    try {
       const user = await UserSchema.findById(req.params.id);
-
-      console.log('user:::', user);
 
       if (user.accounts.length) {
          user.accounts.forEach(account_id => {
@@ -89,6 +99,6 @@ export async function remove(req, res) {
    } catch (e) {
       res.status(500).send({
          error: e.message
-      })
+      });
    }
 }

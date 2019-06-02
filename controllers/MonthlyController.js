@@ -1,5 +1,7 @@
 import Monthly from '../models/Monthly';
 import MonthlySchema from '../models/MonthlySchema';
+import UserSchema from '../models/UserSchema';
+import TransactionSchema from '../models/TransactionSchema';
 const monthly_model = new Monthly(MonthlySchema);
 
 export default {
@@ -36,7 +38,9 @@ export default {
 
    async put(req, res) {
       try {
-
+         const { id } = req.params;
+         const monthly = await MonthlySchema.findByIdAndUpdate(id, req.body, { new: true })
+         res.json(monthly)
       } catch (e) {
          res.status(500).send({
             error: 'Something went wrong while updating your monthly expense'
@@ -46,7 +50,13 @@ export default {
 
    async delete(req, res) {
       try {
-
+         const response = await MonthlySchema.findByIdAndDelete(req.params.id);
+         const monthly = response._id
+         const user = await UserSchema.findByIdAndUpdate(req.user.id, {
+            $pull: { monthlies: monthly }
+         }, { new: true });
+         await TransactionSchema.updateMany({ monthly }, { monthly: null });
+         res.json(user);
       } catch (e) {
          res.status(500).send({
             error: 'Something went wrong while deleting your monthly expense'
