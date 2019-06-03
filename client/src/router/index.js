@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Landing from '@/components/Landing';
-import VueLinks from '@/components/VueLinks'
+import Landing from '@/pages/Landing';
+import VueLinks from '@/pages/VueLinks'
+import Signup from '@/pages/Signup'
 
 Vue.use(Router)
 
@@ -9,13 +10,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Landing',
+      name: 'landing',
       component: Landing
     },
     {
       path: '/vue-links',
-      name: 'Vue links',
+      name: 'vue-links',
       component: VueLinks
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: Signup
     }
   ]
 })

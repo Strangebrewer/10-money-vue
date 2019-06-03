@@ -1,9 +1,9 @@
 <template>
-	<b-nav-form @submit="onSubmit" @reset="onReset" v-if="show">
+	<b-nav-form @submit="onSubmit" @reset="onReset">
 		<b-form-input
 			v-model="form.username"
 			type="text"
-			size="sm"
+			size="xs"
 			class="mr-sm-2"
 			placeholder="Username"
 		></b-form-input>
@@ -14,7 +14,7 @@
 			class="mr-sm-2"
 			placeholder="Password"
 		></b-form-input>
-		<b-button size="sm" class="my-2 my-sm-0" type="submit">Login</b-button>
+		<b-button size="sm" class="my-2 my-sm-0" type="submit">Signup</b-button>
 	</b-nav-form>
 </template>
 
@@ -25,6 +25,7 @@ export default {
 			form: {
 				username: "",
 				password: ""
+				// checked: []
 			},
 			show: true
 		};
@@ -41,6 +42,7 @@ export default {
 			// Reset our form values
 			this.form.username = "";
 			this.form.password = "";
+			this.form.checked = [];
 			// Trick to reset/clear native browser form validation state
 			this.show = false;
 			this.$nextTick(() => {

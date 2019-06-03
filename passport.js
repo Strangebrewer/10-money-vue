@@ -8,7 +8,7 @@ const sign = payload => jwt.sign(payload, PASSPORT_SECRET);
 
 const options = {
    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-   secretOrKey: PASSPORT_SECRET
+   secretOrKey: 'Umberto Abubacus'
 };
 
 passport.use(new Strategy(options, async (payload, done) => {

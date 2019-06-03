@@ -1,3 +1,4 @@
 export default () => ({
-   current: []
+   currentUser: [],
+   isUserLoggedIn: false
 });

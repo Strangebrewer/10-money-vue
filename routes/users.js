@@ -3,16 +3,16 @@ const router = express.Router();
 import isAuthenticated from '../policies/isAuthenticated';
 import * as UserController from '../controllers/UserController';
 
-router.get('/', isAuthenticated, UserController.getCurrentUser);
+router.route('/')
+   .get(isAuthenticated, UserController.getCurrentUser)
+   .put(isAuthenticated, UserController.put);
 
 router.post('/register', UserController.register);
 
 router.post('/login', UserController.login);
 
-router.put('/password', isAuthenticated, UserController.updatePassword)
+router.put('/password', isAuthenticated, UserController.updatePassword);
 
-router.route('/:id')
-   .put(isAuthenticated, UserController.put)
-   .delete(isAuthenticated, UserController.remove)
+router.delete('/:id', isAuthenticated, UserController.remove);
 
 export default router;

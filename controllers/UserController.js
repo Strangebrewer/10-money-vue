@@ -58,7 +58,7 @@ export async function login(req, res) {
 
 export async function put(req, res) {
    try {
-      const user = await user_model.updateUser(req.body, req.params.id);
+      const user = await user_model.updateUser(req.body, req.user.id);
       res.json(user);
    } catch (e) {
       console.log(e);
@@ -83,7 +83,7 @@ export async function updatePassword(req, res) {
 
 export async function remove(req, res) {
    try {
-      const user = await UserSchema.findById(req.params.id);
+      const user = await UserSchema.findByIdAndDelete(req.params.id);
 
       if (user.accounts.length) {
          user.accounts.forEach(account_id => {
@@ -97,8 +97,6 @@ export async function remove(req, res) {
 
       if (user.monthlies.length)
          await MonthlySchema.deleteMany({ user: user._id });
-
-      await UserSchema.findByIdAndDelete(user._id);
 
       res.json(user);
    } catch (e) {
