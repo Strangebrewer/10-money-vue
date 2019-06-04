@@ -1,10 +1,12 @@
 import User from '../models/User';
 import UserSchema from '../models/UserSchema';
+import Transaction from '../models/Transaction';
 import TransactionSchema from '../models/TransactionSchema';
 import AccountSchema from '../models/AccountSchema';
 import CategorySchema from '../models/CategorySchema';
 import MonthlySchema from '../models/MonthlySchema';
 const user_model = new User(UserSchema);
+const transaction_model = new Transaction(TransactionSchema);
 
 export async function getCurrentUser(req, res) {
    try {
@@ -12,6 +14,10 @@ export async function getCurrentUser(req, res) {
          .populate('accounts')
          .populate('monthlies')
          .populate('categories');
+      
+         const transactions_month = await transaction_model.transactionsThisMonth(req.user.id);
+         const transactions_30 = await transaction_model.transactionsLast30Days(req.user.id);
+         
 
       const {
          _id, username, email, first_name, last_name,
@@ -19,8 +25,8 @@ export async function getCurrentUser(req, res) {
       } = user;
 
       const userData = {
-         _id, username, email, first_name, last_name,
-         accounts, monthlies, categories
+         _id, username, email, first_name, last_name, transactions_30,
+         accounts, monthlies, categories, transactions_month
       }
 
       res.json(userData);

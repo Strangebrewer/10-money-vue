@@ -11,15 +11,19 @@ class User {
    async login(req_body) {
       const { username, password } = req_body;
 
-      const response = await this.User.findOne({ username });
+      const response = await this.User.findOne({ username })
+         .populate('accounts')
+         .populate('monthlies')
+         .populate('categories');
+
       if (!response)
          throw new Error('Username is bonkers, yo.');
 
       const passwordValid = this.checkPassword(password, response.password);
       if (passwordValid) {
-         const { _id, email, first_name, last_name, username } = response;
+         const { _id, email, first_name, last_name, username, accounts, monthlies, categories } = response;
          const token = sign({ id: _id, username, });
-         const user = { _id, email, first_name, last_name, username };
+         const user = { _id, email, first_name, last_name, username, accounts, monthlies, categories };
          return { token, user };
       } else {
          throw new Error('Who you tryin\' to fool? That ain\'t yo password!');

@@ -6,7 +6,7 @@ const AccountSchema = new Schema({
    type: { type: String, required: true, default: 'holdings', enum: ['debt', 'holdings'] },
    description: String,
    balance: { type: Number, required: true },
-   status: { type: String, required: true, default: 'canceled', enum: ['active', 'canceled'] },
+   status: { type: String, required: true, default: 'active', enum: ['active', 'canceled'] },
    user: { type: Schema.Types.ObjectId, ref: 'User'},
 }, { timestamps: true });
 
