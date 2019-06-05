@@ -11,7 +11,7 @@
 							class="d-flex justify-content-between align-items-center"
 						>
 							{{ account.name }}
-							<span>{{ account.money }}</span>
+							<span class="font-weight-bold">{{ moneyFormat(account.balance) }}</span>
 						</b-list-group-item>
 					</b-list-group>
 				</b-card>
@@ -20,11 +20,17 @@
 			<b-col cols="12" sm="10" md="8" lg="4">
 				<b-card title="Spending Categories" class="shadow border-primary text-left my-3">
 					<b-list-group>
-						<b-list-group-item
-							v-for="category in categories"
-							:key="category._id"
-							class="d-flex justify-content-between align-items-center"
-						>{{ category.name }}</b-list-group-item>
+						<b-list-group-item v-for="category in categories" :key="category._id">
+							{{ category.name }}
+							<b-badge
+								variant="success"
+								class="float-right width-75 block"
+							>{{ moneyFormat(category.thirty_total) }}</b-badge>
+							<b-badge
+								variant="primary"
+								class="float-right width-60 mr-1 block"
+							>{{ moneyFormat(category.month_total) }}</b-badge>
+						</b-list-group-item>
 					</b-list-group>
 				</b-card>
 			</b-col>
@@ -32,11 +38,16 @@
 			<b-col cols="12" sm="10" md="8" lg="4">
 				<b-card title="Monthly Bills" class="shadow border-primary text-left my-3">
 					<b-list-group>
-						<b-list-group-item
-							v-for="monthly in monthlies"
-							:key="monthly._id"
-							class="d-flex justify-content-between align-items-center"
-						>{{ monthly.name }}</b-list-group-item>
+						<b-list-group-item v-for="monthly in monthlies" :key="monthly._id">
+							{{ monthly.name }}
+							<b-badge
+								class="float-right width-75 block font-weight-bold"
+							>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : monthly.amount) }}</b-badge>
+							<b-badge
+								class="float-right width-60 block mr-1"
+								:variant="monthly.this_month.length ? 'success' : 'warning'"
+							>{{ monthly.this_month.length ? 'Paid' : `Due ${monthly.due_date}` }}</b-badge>
+						</b-list-group-item>
 					</b-list-group>
 				</b-card>
 			</b-col>
@@ -61,31 +72,22 @@ export default {
 
 	computed: {
 		accounts() {
-			const accounts = this.$store.state.user.currentUser.accounts.map(
-				account => {
-					// const money = `$${parseFloat(account.balance / 100).toFixed(2)}`;
-					const money = `${formatMoney(account.balance)}`;
-					account.money = money;
-					return account;
-				}
-			);
-			return accounts;
+			return this.$store.state.user.currentUser.accounts;
 		},
 		categories() {
 			return this.$store.state.user.currentUser.categories;
 		},
 		monthlies() {
-			const rent_id = this.$store.state.user.currentUser.monthlies.filter(
-				monthly => true
-			);
-			console.log("rent_id:::", rent_id);
-			console.log(
-				"transactions taht are AFCU Visa:::",
-				this.$store.state.user.currentUser.transactions_month.filter(
-					transaction => transaction.monthly === "5cf60e1a06c6a22444cb99e4"
-				)
-			);
 			return this.$store.state.user.currentUser.monthlies;
+		}
+	},
+
+	methods: {
+		moneyFormat(number) {
+			return formatMoney(number);
+		},
+		moneyReduce(array) {
+			return array.reduce((total, item) => total + item.amount, 0);
 		}
 	},
 
@@ -97,4 +99,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.width-75 {
+	min-width: 75px;
+}
+.width-60 {
+	min-width: 60px;
+}
 </style>

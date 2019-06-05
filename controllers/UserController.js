@@ -5,6 +5,8 @@ import TransactionSchema from '../models/TransactionSchema';
 import AccountSchema from '../models/AccountSchema';
 import CategorySchema from '../models/CategorySchema';
 import MonthlySchema from '../models/MonthlySchema';
+import { addTransactions } from '../lib/ControllerHelpers';
+
 const user_model = new User(UserSchema);
 const transaction_model = new Transaction(TransactionSchema);
 
@@ -14,21 +16,20 @@ export async function getCurrentUser(req, res) {
          .populate('accounts')
          .populate('monthlies')
          .populate('categories');
-      
-         const transactions_month = await transaction_model.transactionsThisMonth(req.user.id);
-         const transactions_30 = await transaction_model.transactionsLast30Days(req.user.id);
-         
 
-      const {
-         _id, username, email, first_name, last_name,
-         accounts, monthlies, categories
-      } = user;
+      const { _id, username, email, first_name, last_name } = user;
+
+      const transactions_month = await transaction_model.transactionsThisMonth(req.user.id);
+      const transactions_30 = await transaction_model.transactionsLast30Days(req.user.id);
+
+      const accounts = addTransactions(user.accounts, 'account', transactions_month, transactions_30);
+      const categories = addTransactions(user.categories, 'category', transactions_month, transactions_30);
+      const monthlies = addTransactions(user.monthlies, 'monthly', transactions_month, transactions_30);
 
       const userData = {
          _id, username, email, first_name, last_name, transactions_30,
-         accounts, monthlies, categories, transactions_month
+         transactions_month, accounts, monthlies, categories,
       }
-
       res.json(userData);
    } catch (e) {
       console.log(e);
@@ -52,8 +53,23 @@ export async function register(req, res) {
 
 export async function login(req, res) {
    try {
-      const user = await user_model.login(req.body);
-      res.json(user);
+      const response = await user_model.login(req.body);
+      const { _id, username, email, first_name, last_name } = response.user;
+
+      const transactions_month = await transaction_model.transactionsThisMonth(response.user._id);
+      const transactions_30 = await transaction_model.transactionsLast30Days(response.user._id);
+
+      const accounts = addTransactions(response.user.accounts, 'account', transactions_month, transactions_30);
+      const categories = addTransactions(response.user.categories, 'category', transactions_month, transactions_30);
+      const monthlies = addTransactions(response.user.monthlies, 'monthly', transactions_month, transactions_30);
+
+      const user = {
+         _id, username, email, first_name, last_name, transactions_30,
+         transactions_month, accounts, monthlies, categories,
+      }
+      const user_data = { user, token: response.token };
+
+      res.json(user_data);
    } catch (e) {
       console.log(e);
       res.status(418).send({
@@ -75,7 +91,6 @@ export async function put(req, res) {
 }
 
 export async function updatePassword(req, res) {
-   console.log('req.user:::', req.user);
    try {
       const user = await user_model.updatePassword(req.body, req.user);
       res.json(user);

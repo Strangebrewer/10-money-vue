@@ -22,5 +22,10 @@
    {
       "name": "Car Repair",
       "description": "Reactive incremental productivity"
+   },
+   {
+      "name": "Paychecks",
+      "description": "Reactive incremental productivity",
+      "type": "income"
    }
 ]
