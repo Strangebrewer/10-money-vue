@@ -22,4 +22,10 @@ export default {
 </script>
 
 <style>
+html {
+   font-size: 15px;
+}
+.text-sm {
+   font-size: 12px;
+}
 </style>

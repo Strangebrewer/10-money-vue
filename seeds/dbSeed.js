@@ -41,7 +41,7 @@ async function seedDb() {
       const accounts = await AccountSchema.insertMany(account_seed);
       for (let i = 0; i < accounts.length; i++) {
          const element = accounts[i];
-         const new_user = await UserSchema.findByIdAndUpdate(users[0]._id, {
+         await UserSchema.findByIdAndUpdate(users[0]._id, {
             $push: { accounts: element._id }
          })
       }
@@ -62,150 +62,54 @@ async function seedDb() {
          })
       }
 
-      for (let i = 1; i < transaction_seed.length; i += 4) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.account = accounts[4]._id;
+      function addAccountToTransaction(index, start, seed) {
+         for (let i = start; i < seed.length; i += 4) {
+            if (i >= seed.length) return;
+            const element = seed[i];
+            element.account = accounts[index]._id;
+         }
       }
 
-      for (let i = 2; i < transaction_seed.length; i += 4) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.account = accounts[3]._id;
+      function addCategoryToTransaction(index, start, increment, seed) {
+         for (let i = start; i < seed.length; i += increment) {
+            if (i >= seed.length) return;
+            const element = seed[i];
+            element.category = categories[index]._id;
+         }
       }
 
-      for (let i = 3; i < transaction_seed.length; i += 4) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.account = accounts[0]._id;
-      }
-
-      for (let i = 0; i < transaction_seed.length; i += 4) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.account = accounts[5]._id;
-      }
-
-      for (let i = 0; i < transaction_seed.length; i += 11) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.category = categories[0]._id;
-      }
-
-      for (let i = 1; i < transaction_seed.length; i += 6) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.category = categories[1]._id;
-      }
-
-      for (let i = 5; i < transaction_seed.length; i += 33) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.category = categories[3]._id;
-      }
-
-      for (let i = 2; i < transaction_seed.length; i += 23) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.category = categories[2]._id;
-      }
-
-      for (let i = 3; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[0]._id;
-         element.amount = 109000;
-         element.type = 'expense'
-      }
-
-      for (let i = 2; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[1]._id;
-         element.amount = 6695;
-         element.type = 'expense'
-      }
-
-      for (let i = 5; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[2]._id;
-         element.amount = 5500;
-         element.type = 'expense'
-      }
-
-      for (let i = 7; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[3]._id;
-         element.amount = 5500;
-         element.type = 'expense'
-      }
-
-      for (let i = 8; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[4]._id;
-         element.amount = 12099;
-         element.type = 'expense'
-      }
-
-      for (let i = 11; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[5]._id;
-         element.amount = 11600;
-         element.type = 'expense'
-      }
-
-
-      for (let i = 2; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[6]._id;
-         element.amount = 18787;
-         element.type = 'expense'
-      }
-
-      for (let i = 3; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[7]._id;
-         element.amount = 34000;
-         element.type = 'expense'
-      }
-
-      for (let i = 6; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[8]._id;
-         element.amount = 27500;
-         element.type = 'expense'
-      }
-
-      for (let i = 22; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[9]._id;
-         element.amount = 30000;
-         element.type = 'expense'
-      }
-
-      for (let i = 12; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[10]._id;
-         element.amount = 2500,
+      function addMonthlyToTransaction(index, start, amount, seed) {
+         for (let i = start; i < seed.length; i += 87) {
+            if (i >= seed.length) return;
+            const element = seed[i];
+            element.monthly = monthlies[index]._id;
+            element.amount = amount;
             element.type = 'expense'
+         }
       }
 
-      for (let i = 15; i < transaction_seed.length; i += 87) {
-         if (i >= transaction_seed.length) return;
-         const element = transaction_seed[i];
-         element.monthly = monthlies[11]._id;
-         element.amount = 35000;
-         element.type = 'expense'
-      }
+      addAccountToTransaction(4, 1, transaction_seed);
+      addAccountToTransaction(3, 2, transaction_seed);
+      addAccountToTransaction(0, 3, transaction_seed);
+      addAccountToTransaction(5, 0, transaction_seed);
+
+      addCategoryToTransaction(0, 0, 11, transaction_seed);
+      addCategoryToTransaction(1, 1, 6, transaction_seed);
+      addCategoryToTransaction(3, 5, 33, transaction_seed);
+      addCategoryToTransaction(2, 2, 23, transaction_seed);
+      
+      addMonthlyToTransaction(0, 3, 109000, transaction_seed);
+      addMonthlyToTransaction(1, 2, 6695, transaction_seed);
+      addMonthlyToTransaction(2, 5, 5500, transaction_seed);
+      addMonthlyToTransaction(3, 7, 5500, transaction_seed);
+      addMonthlyToTransaction(4, 8, 12099, transaction_seed);
+      addMonthlyToTransaction(5, 11, 11600, transaction_seed);
+      addMonthlyToTransaction(6, 2, 18787, transaction_seed);
+      addMonthlyToTransaction(7, 3, 34000, transaction_seed);
+      addMonthlyToTransaction(8, 6, 27500, transaction_seed);
+      addMonthlyToTransaction(9, 22, 30000, transaction_seed);
+      addMonthlyToTransaction(10, 12, 2500, transaction_seed);
+      addMonthlyToTransaction(11, 15, 35000, transaction_seed);
 
       for (let i = 0; i < transaction_seed.length; i += 43) {
          if (i >= transaction_seed.length) return;
@@ -217,15 +121,11 @@ async function seedDb() {
 
       for (let i = 0; i < transaction_seed.length; i++) {
          const element = transaction_seed[i];
-         element.user = users[0]._id         
+         element.user = users[0]._id
       }
 
       const transactions = await TransactionSchema.insertMany(transaction_seed);
-
-      const final_users = await UserSchema.findById(users[0]._id);      
       
-      console.log('final_users:::', final_users);
-
       console.log("***********Aaaaaand, here's your insert counts:*************");
       console.log(users.length + " user records inserted!");
       console.log(accounts.length + " account records inserted!");

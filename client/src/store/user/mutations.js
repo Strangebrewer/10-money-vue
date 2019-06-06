@@ -1,11 +1,12 @@
 export default {
    setUser(state, user) {
-      console.log('state:::', state);
-      console.log('user in setUser mutation:::', user);
-      state.currentUser = user;
-      if (user)
+      if (user) {
+         state.currentUser = user;
          state.isUserLoggedIn = true;
-      else
+      }
+      else {
+         state.currentUser = {};
          state.isUserLoggedIn = false;
+      }
    }
 }

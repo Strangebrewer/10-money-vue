@@ -7,6 +7,7 @@ export default {
          Authentication.login(credentials)
             .then(user => {
                commit('setUser', user.data.user);
+               commit('setMonthlies', user.data.user.monthlies);
                localStorage.setItem('token', user.data.token);
                return resolve(user.data);
             })
@@ -33,6 +34,7 @@ export default {
          Authentication.getCurrentUser()
             .then(user => {
                commit('setUser', user.data);
+               commit('setMonthlies', user.data.monthlies);
                resolve(user.data);
             })
             .catch(err => reject(err));
@@ -45,7 +47,6 @@ export default {
       return new Promise((resolve, reject) => {
          Accounts.post(account_data)
             .then(account => {
-               console.log('account in newAccount action:::', account);
                return resolve(account.data)
             })
             .catch(err => reject(err))
