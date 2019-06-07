@@ -1,5 +1,5 @@
 <template>
-	<b-modal :id="id" ref="bill-settings" :title="`${modalMonthly.name} Settings`">
+	<b-modal :id="id" ref="monthly-edit" :title="`${modalMonthly.name} Settings`">
 		<label for="monthly-name" class="mb-0">Name:</label>
 		<b-form-input id="monthly-name" v-model="modalMonthly.name"></b-form-input>
 
@@ -18,7 +18,7 @@
 		</b-form-select>
 
 		<template slot="modal-footer">
-			<b-button @click="$bvModal.hide('bill-settings')">Cancel</b-button>
+			<b-button @click="$bvModal.hide('monthly-edit')">Cancel</b-button>
 			<b-button @click="saveMonthly">Submit</b-button>
 		</template>
 	</b-modal>
@@ -36,7 +36,7 @@ export default {
 		async saveMonthly() {
 			await this.$store.dispatch("updateMonthly", this.modalMonthly);
 			this.$store.dispatch("getMonthlies");
-			this.$refs["bill-settings"].hide();
+			this.$refs["monthly-edit"].hide();
 		}
 	}
 };

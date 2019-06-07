@@ -21,6 +21,11 @@
 				<b-card title="Spending Categories" class="shadow border-primary text-left my-3">
 					<b-list-group>
 						<b-list-group-item v-for="category in categories" :key="category._id" class="p-2 m-1">
+                            <i
+								class="fas fa-edit mr-1 pointer text-sm text-primary"
+								v-b-modal.category-edit
+								@click="setCategory(category)"
+							></i>
 							{{ category.name }}
 							<b-badge
 								variant="success"
@@ -75,30 +80,42 @@
 			</b-form-select>
 		</b-modal>
 
-		<bill-settings-modal
+        <category-edit-modal
+			v-if="modal_category.name"
+			:category="modal_category"
+			:accounts="accounts"
+            id="category-edit"
+        />
+
+		<monthly-edit-modal
 			v-if="modal_monthly.name"
 			:monthly="modal_monthly"
 			:accounts="accounts"
-			:id="`bill-settings`"
+			:id="`monthly-edit`"
 		/>
 	</b-container>
 </template>
 
 <script>
 import Login from "../components/Forms/Login";
-import BillSettingsModal from "../components/Modals/BillSettings";
+import MonthlyEditModal from "../components/Modals/MonthlyEdit";
+import CategoryEditModal from "../components/Modals/CategoryEdit";
 import formatMoney from "../lib/formatMoney";
 import swal from "sweetalert2";
 
 export default {
 	components: {
 		Login,
-		BillSettingsModal
+        MonthlyEditModal,
+        CategoryEditModal
 	},
 
 	data() {
 		return {
-			selected: null,
+            selected: null,
+            modal_category: {
+
+            },
 			modal_monthly: {
 				name: "",
 				description: "",
@@ -115,7 +132,7 @@ export default {
 			return this.$store.state.user.currentUser.accounts;
 		},
 		categories() {
-			return this.$store.state.user.currentUser.categories;
+			return this.$store.state.category.all;
 		},
 		monthlies() {
 			return this.$store.state.monthly.all;
@@ -141,22 +158,22 @@ export default {
 			this.$refs["bill-settings"].hide();
       },
       async quikPay(monthly) {
-         console.log('monthly:::', monthly);
-         // swal({
-         //    title: `Paying ${monthly.name}`,
-         //    text: ''
-         //    subtitle: 'Derp',
-         //    input: 'text',
-         //    inputValue: formatMoney(monthly.amount),
-         //    showCancelButton: true,
-         //    allowOutsideClick: true,
-    
-         // })
+         swal.fire({
+            title: `Paying ${monthly.name}`,
+            text: '',
+            input: 'text',
+            inputValue: formatMoney(monthly.amount),
+            showCancelButton: true,
+            allowOutsideClick: true,    
+         });
+      },
+      setCategory(category) {
+          this.modal_category = { ...category };
       }
 	},
 
 	mounted() {
-		// console.log("this.$store.state:::", this.$store.state);
+		console.log("this.$store.state:::", this.$store.state);
 	}
 };
 </script>
