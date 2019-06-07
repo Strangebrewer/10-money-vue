@@ -2,7 +2,7 @@
 	<b-container fluid class="landing text-center">
 		<b-jumbotron :header="msg"></b-jumbotron>
 		<b-row v-if="loggedIn" align-h="center">
-			<b-col cols="12" sm="10" md="8" lg="6" xl="4">
+			<b-col cols="12" sm="10" md="8" lg="6">
 				<b-card title="Accounts" class="shadow border-primary text-left my-3">
 					<b-list-group>
 						<b-list-group-item
@@ -17,7 +17,7 @@
 				</b-card>
 			</b-col>
 
-			<b-col cols="12" sm="10" md="8" lg="6" xl="4">
+			<b-col cols="12" sm="10" md="8" lg="6">
 				<b-card title="Spending Categories" class="shadow border-primary text-left my-3">
 					<b-list-group>
 						<b-list-group-item v-for="category in categories" :key="category._id" class="p-2 m-1">
@@ -35,24 +35,33 @@
 				</b-card>
 			</b-col>
 
-			<b-col cols="12" sm="10" md="8" lg="6" xl="4">
+         <b-col cols="12" sm="10" md="8" lg="6">
 				<b-card title="Monthly Bills" class="shadow border-primary text-left my-3">
 					<b-list-group>
 						<b-list-group-item v-for="monthly in monthlies" :key="monthly._id" class="p-2 m-1">
 							<i
-								class="far fa-edit mr-1 pointer text-sm"
+								class="fas fa-edit mr-1 pointer text-sm text-primary"
 								v-b-modal.bill-settings
 								@click="setMonthly(monthly)"
 							></i>
-							<span v-b-tooltip.hover :title="monthly.desc">{{ monthly.name }}</span>
-							<b-badge
-								class="float-right width-75 mt-1 font-weight-bold"
-							>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : monthly.amount) }}</b-badge>
-							<b-badge
+							<span v-b-tooltip.hover :title="monthly.desc" class="font-weight-bold">{{ monthly.name }}</span>
+							<span
+								class="float-right width-75 font-weight-bold text-right"
+							>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : monthly.amount) }}</span>
+							<span
 								@click="!monthly.this_month.length && $bvModal.show('bill-pay')"
-								:class="`float-right width-60 mr-2 mt-1 ${!monthly.this_month.length && 'pointer'}`"
-								:variant="monthly.this_month.length ? 'success' : 'warning'"
-							>{{ monthly.this_month.length ? 'Paid' : `Due ${monthly.due_date}` }}</b-badge>
+								class="width-60 mr-2 text-info text-sm font-weight-bold"
+							> - {{ `Due ${monthly.due_date}` }}</span>
+                     <span
+                        v-if="!monthly.this_month.length"
+                        class="mr-2 pointer float-right pb-1 text-sm font-italic font-weight-bold text-primary"
+                        variant="warning"
+                        @click="quikPay(monthly)"
+							>quikpay</span>
+                     <span
+                        v-if="monthly.this_month.length"
+                        class="mr-2 float-right text-sm font-italic font-weight-bold text-success"
+							>paid <i class="fas fa-check-circle" /></span>
 						</b-list-group-item>
 					</b-list-group>
 				</b-card>
@@ -130,7 +139,20 @@ export default {
 			await this.$store.dispatch("updateMonthly", this.modal_monthly);
 			this.$store.dispatch("getMonthlies");
 			this.$refs["bill-settings"].hide();
-		}
+      },
+      async quikPay(monthly) {
+         console.log('monthly:::', monthly);
+         // swal({
+         //    title: `Paying ${monthly.name}`,
+         //    text: ''
+         //    subtitle: 'Derp',
+         //    input: 'text',
+         //    inputValue: formatMoney(monthly.amount),
+         //    showCancelButton: true,
+         //    allowOutsideClick: true,
+    
+         // })
+      }
 	},
 
 	mounted() {

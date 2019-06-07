@@ -28,4 +28,10 @@ html {
 .text-sm {
    font-size: 12px;
 }
+.text-md {
+   font-size: 14px;
+}
+.text-lg {
+   font-size: 18px;
+}
 </style>
