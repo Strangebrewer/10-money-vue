@@ -9,6 +9,7 @@ export default {
                commit('setUser', user.data.user);
                commit('setMonthlies', user.data.user.monthlies);
                commit('setCategories', user.data.user.categories);
+               commit('setAccounts', user.data.user.accounts);
                localStorage.setItem('token', user.data.token);
                return resolve(user.data);
             })
@@ -37,6 +38,7 @@ export default {
                commit('setUser', user.data);
                commit('setMonthlies', user.data.monthlies);
                commit('setCategories', user.data.categories);
+               commit('setAccounts', user.data.accounts);
                resolve(user.data);
             })
             .catch(err => reject(err));

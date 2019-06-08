@@ -19,54 +19,52 @@
 
 			<b-col cols="12" sm="10" md="8" lg="6">
 				<b-card title="Spending Categories" class="shadow border-primary text-left my-3">
-					<b-list-group>
-						<b-list-group-item v-for="category in categories" :key="category._id" class="p-2 m-1">
-                            <i
-								class="fas fa-edit mr-1 pointer text-sm text-primary"
-								v-b-modal.category-edit
-								@click="setCategory(category)"
-							></i>
-							{{ category.name }}
-							<b-badge
-								variant="success"
-								class="float-right width-75 mt-1"
-							>{{ moneyFormat(category.thirty_total) }}</b-badge>
-							<b-badge
-								variant="primary"
-								class="float-right width-60 mr-2 mt-1"
-							>{{ moneyFormat(category.month_total) }}</b-badge>
-						</b-list-group-item>
-					</b-list-group>
+					<category-table :categories="categories"/>
 				</b-card>
 			</b-col>
 
-         <b-col cols="12" sm="10" md="8" lg="6">
-				<b-card title="Monthly Bills" class="shadow border-primary text-left my-3">
+			<b-col cols="12" sm="10" md="8" lg="6">
+				<b-card
+					:title="`Monthly Bills - ${formatMonth(new Date())}`"
+					class="shadow border-primary text-left my-3"
+				>
 					<b-list-group>
 						<b-list-group-item v-for="monthly in monthlies" :key="monthly._id" class="p-2 m-1">
 							<i
 								class="fas fa-edit mr-1 pointer text-sm text-primary"
-								v-b-modal.bill-settings
+								v-b-modal.monthly-edit
 								@click="setMonthly(monthly)"
 							></i>
-							<span v-b-tooltip.hover :title="monthly.desc" class="font-weight-bold">{{ monthly.name }}</span>
+							<span
+								v-b-tooltip.hover
+								:title="monthly.description"
+								class="font-weight-bold"
+							>{{ monthly.name }}</span>
 							<span
 								class="float-right width-75 font-weight-bold text-right"
-							>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : monthly.amount) }}</span>
+							>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : 0) }}</span>
 							<span
 								@click="!monthly.this_month.length && $bvModal.show('bill-pay')"
 								class="width-60 mr-2 text-info text-sm font-weight-bold"
-							> - {{ `Due ${monthly.due_date}` }}</span>
-                     <span
-                        v-if="!monthly.this_month.length"
-                        class="mr-2 pointer float-right pb-1 text-sm font-italic font-weight-bold text-primary"
-                        variant="warning"
-                        @click="quikPay(monthly)"
+							>- {{ `Due ${monthly.due_date}` }}</span>
+							<span
+								v-if="!monthly.this_month.length && monthly.default_account"
+								class="mr-2 pointer float-right pb-1 text-sm font-italic font-weight-bold text-primary"
+								@click="quikPay(monthly)"
 							>quikpay</span>
-                     <span
-                        v-if="monthly.this_month.length"
-                        class="mr-2 float-right text-sm font-italic font-weight-bold text-success"
-							>paid <i class="fas fa-check-circle" /></span>
+							<span
+								v-if="!monthly.this_month.length && !monthly.default_account"
+								class="mr-2 float-right pb-1 text-sm font-italic font-weight-bold text-secondary"
+								v-b-tooltip.hover
+								title="you must set a default account to use quikpay"
+							>quikpay</span>
+							<span
+								v-if="monthly.this_month.length"
+								class="mr-2 float-right text-sm font-italic font-weight-bold text-success"
+							>
+								paid
+								<i class="fas fa-check-circle"/>
+							</span>
 						</b-list-group-item>
 					</b-list-group>
 				</b-card>
@@ -80,18 +78,17 @@
 			</b-form-select>
 		</b-modal>
 
-        <category-edit-modal
-			v-if="modal_category.name"
+		<category-edit-modal
 			:category="modal_category"
-			:accounts="accounts"
-            id="category-edit"
-        />
+			ref="category-edit"
+			id="category-edit"
+		/>
 
 		<monthly-edit-modal
 			v-if="modal_monthly.name"
 			:monthly="modal_monthly"
 			:accounts="accounts"
-			:id="`monthly-edit`"
+			id="monthly-edit"
 		/>
 	</b-container>
 </template>
@@ -100,36 +97,31 @@
 import Login from "../components/Forms/Login";
 import MonthlyEditModal from "../components/Modals/MonthlyEdit";
 import CategoryEditModal from "../components/Modals/CategoryEdit";
+import CategoryTable from "../components/Tables/CategoriesTable";
 import formatMoney from "../lib/formatMoney";
 import swal from "sweetalert2";
+import dateFns from "date-fns";
 
 export default {
 	components: {
 		Login,
-        MonthlyEditModal,
-        CategoryEditModal
+		MonthlyEditModal,
+		CategoryEditModal,
+		CategoryTable
 	},
 
 	data() {
 		return {
-            selected: null,
-            modal_category: {
-
-            },
-			modal_monthly: {
-				name: "",
-				description: "",
-				amount: "",
-				due_date: "",
-				default_account: "Please select an account"
-			},
+			selected: null,
+			modal_category: {},
+			modal_monthly: {},
 			msg: "Landing Page"
 		};
 	},
 
 	computed: {
 		accounts() {
-			return this.$store.state.user.currentUser.accounts;
+			return this.$store.state.account.all;
 		},
 		categories() {
 			return this.$store.state.category.all;
@@ -155,35 +147,48 @@ export default {
 		async saveMonthly() {
 			await this.$store.dispatch("updateMonthly", this.modal_monthly);
 			this.$store.dispatch("getMonthlies");
-			this.$refs["bill-settings"].hide();
-      },
-      accountOptions() {
-         const options = {}
-         for (let i = 0; i < this.accounts.length; i++) {
-            const element = this.accounts[i];
-            options[element._id] = element.name
-         }
-         console.log('options:::', options);
-         return options;
-      },
-      async quikPay(monthly) {
-         console.log('monthly:::', monthly);
-         this.setMonthly(monthly);
-         swal.fire({
-            title: `Paying ${monthly.name}`,
-            text: 'To use defaults, just click OK',
-            showCancelButton: true,
-            allowOutsideClick: true,
-
-         }).then(({ value }) => {
-            if (value) {
-               
-            }
-         })
-      },
-      setCategory(category) {
-          this.modal_category = { ...category };
-      }
+			this.$refs["monthly-edit"].hide();
+		},
+		async quikPay(monthly) {
+			this.setMonthly(monthly);
+			const swal_options = {
+				title: `Paying ${monthly.name}`,
+				text: "To use defaults, just click OK",
+				showCancelButton: true,
+				allowOutsideClick: true
+			};
+			if (!monthly.amount) {
+				(swal_options.text = "Enter an amount"), (swal_options.input = "text");
+			}
+			swal.fire(swal_options).then(async ({ value }) => {
+				if (value) {
+					if (isNaN(parseFloat(value)) && !monthly.amount) {
+						swal.fire("Please enter a valid number");
+					}
+					let amount = parseFloat(value) * 100;
+					if (typeof value === "string" && value.includes(".")) {
+						amount = parseFloat(value).toFixed(2) * 100;
+					}
+					const transaction_data = {
+						account: monthly.default_account,
+						monthly: monthly._id,
+						description: monthly.description,
+						amount: monthly.amount || amount
+					};
+					await this.$store.dispatch("postTransaction", transaction_data);
+					this.$store.dispatch("getMonthlies");
+					this.$store.dispatch("getAccounts");
+				} else {
+					swal.fire("Please enter a valid number");
+				}
+			});
+		},
+		setCategory(category) {
+         this.modal_category = { ...category };
+		},
+		formatMonth(date) {
+			return dateFns.format(date, "MMM YYYY");
+		}
 	},
 
 	mounted() {

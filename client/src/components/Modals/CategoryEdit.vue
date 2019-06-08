@@ -3,12 +3,11 @@
 		<label for="category-name" class="mb-0">Name:</label>
 		<b-form-input id="category-name" v-model="modalCategory.name"></b-form-input>
 
-
 		<label for="category-description" class="mt-3 mb-0">Description:</label>
 		<b-form-input id="category-description" v-model="modalCategory.description"></b-form-input>
 
 		<label for="category-type" class="mt-3 mb-0">Type:</label>
-        <b-form-select v-model="modalCategory.type" id="category-type">
+		<b-form-select v-model="modalCategory.type" id="category-type">
 			<option value="income">Income</option>
 			<option value="expense">Expense</option>
 		</b-form-select>
@@ -22,7 +21,7 @@
 
 <script>
 export default {
-	props: ["category", "accounts", "id"],
+	props: ["category", "id"],
 	computed: {
 		modalCategory() {
 			return { ...this.category };
