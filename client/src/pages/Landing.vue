@@ -157,15 +157,29 @@ export default {
 			this.$store.dispatch("getMonthlies");
 			this.$refs["bill-settings"].hide();
       },
+      accountOptions() {
+         const options = {}
+         for (let i = 0; i < this.accounts.length; i++) {
+            const element = this.accounts[i];
+            options[element._id] = element.name
+         }
+         console.log('options:::', options);
+         return options;
+      },
       async quikPay(monthly) {
+         console.log('monthly:::', monthly);
+         this.setMonthly(monthly);
          swal.fire({
             title: `Paying ${monthly.name}`,
-            text: '',
-            input: 'text',
-            inputValue: formatMoney(monthly.amount),
+            text: 'To use defaults, just click OK',
             showCancelButton: true,
-            allowOutsideClick: true,    
-         });
+            allowOutsideClick: true,
+
+         }).then(({ value }) => {
+            if (value) {
+               
+            }
+         })
       },
       setCategory(category) {
           this.modal_category = { ...category };
