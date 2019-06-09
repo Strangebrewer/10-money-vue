@@ -13,7 +13,7 @@
 		</b-form-select>
 
 		<template slot="modal-footer">
-			<b-button @click="$bvModal.hide('category-edit')">Cancel</b-button>
+			<b-button @click="$bvModal.hide(id)">Cancel</b-button>
 			<b-button @click="saveCategory">Submit</b-button>
 		</template>
 	</b-modal>
@@ -21,17 +21,17 @@
 
 <script>
 export default {
-	props: ["category", "id"],
-	computed: {
-		modalCategory() {
-			return { ...this.category };
-		}
-	},
+   props: ["category", "id"],
+   computed: {
+      modalCategory() {
+         return { ...this.category };
+      }
+   },
 	methods: {
 		async saveCategory() {
 			await this.$store.dispatch("updateCategory", this.modalCategory);
 			this.$store.dispatch("getCategories");
-			this.$refs["category-edit"].hide();
+			this.$refs[this.id].hide();
 		}
 	}
 };

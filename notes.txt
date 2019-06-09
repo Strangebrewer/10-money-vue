@@ -1,0 +1,9 @@
+
+
+TODO:
+
+Add icon to MonthliesCard.vue to allow paying while not using default settings
+
+Add saveAccount functionality to AccountEdit.vue for changing account details
+
+Add transaction functionality to all three (only quikpay on Monthlies has been set)
