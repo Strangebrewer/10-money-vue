@@ -10,7 +10,7 @@
 					title="Edit this category"
 				/>
 				<i
-					class="fas fa-usd-square ml-1 mr-2 pointer text-md text-success"
+					class="fas fa-usd-square ml-1 pointer text-md text-success"
 					@click="setCategory(row.item)"
 					v-b-modal.category-edit
 					v-b-tooltip.hover

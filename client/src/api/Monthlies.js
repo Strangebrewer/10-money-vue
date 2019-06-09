@@ -1,7 +1,8 @@
 import API from './API';
 
 export default {
-   index() {
+   index(id) {
+      if (id) return API().get(`/monthlies/${id}`);
       return API().get(`/monthlies`);
    },
    put(id, monthly_data) {

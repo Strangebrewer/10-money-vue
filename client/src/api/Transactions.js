@@ -1,7 +1,8 @@
 import API from './API';
 
 export default {
-   index() {
+   index(id) {
+      if (id) return API().get(`/transactions/${id}`);
       return API().get(`/transactions`);
    },
    post(transaction_data) {
