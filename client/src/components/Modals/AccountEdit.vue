@@ -22,17 +22,23 @@
 <script>
 export default {
 	props: ["account", "id"],
-   computed: {
-      modalAccount() {
-         return { ...this.account };
-      }
-   },
+	computed: {
+		modalAccount() {
+			return { ...this.account };
+		}
+	},
 	methods: {
-		saveAccount() {
-         console.log('this.modalAccount:::', this.modalAccount);
-         this.$refs[this.id].hide();
-      }
-   }
+		async saveAccount() {
+			const { name, type, description } = this.modalAccount;
+			const account_data = {
+				_id: this.modalAccount._id,
+				account_update: { name, type, description }
+			};
+         await this.$store.dispatch('updateAccount', account_data);
+         this.$store.dispatch('getAccounts');
+			this.$refs[this.id].hide();
+		}
+	}
 };
 </script>
 

@@ -7,5 +7,8 @@ export default {
    },
    post(account_data) {
       return API().post('/accounts', account_data);
+   },
+   put(id, account_data) {
+      return API().put(`/accounts/${id}`, account_data);
    }
 }

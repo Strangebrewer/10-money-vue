@@ -7,20 +7,20 @@
 				class="p-2 m-1"
 			>
 				<i
-					class="fas fa-edit mr-1 pointer text-md text-primary"
+					class="fas fa-edit mr-1 ml-1 pointer text-md text-primary"
 					v-b-modal.account-edit
 					@click="setAccount(account)"
 					v-b-tooltip.hover
 					title="Edit account information"
 				/>
 				<i
-					class="fas fa-usd-square ml-1 mr-4 pointer text-md text-success"
+					class="fas fa-usd-square mr-3 pointer text-md text-success"
 					@click="setAccount(account)"
 					v-b-modal.account-edit
 					v-b-tooltip.hover
 					title="Record a new transaction for this account"
 				/>
-				{{ account.name }}
+				<span v-b-tooltip.hover :title="account.description">{{ account.name }}</span>
 				<span class="font-weight-bold float-right">{{ moneyFormat(account.balance) }}</span>
 			</b-list-group-item>
 		</b-list-group>

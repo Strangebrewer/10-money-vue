@@ -6,15 +6,26 @@
 		<b-list-group>
 			<b-list-group-item v-for="monthly in monthlies" :key="monthly._id" class="p-2 m-1">
 				<i
-					class="fas fa-edit mr-4 pointer text-md text-primary"
+					class="fas fa-edit mr-1 ml-1 pointer text-md text-primary"
 					v-b-modal.monthly-edit
 					@click="setMonthly(monthly)"
+					v-b-tooltip.hover
+					title="Edit this bill"
+				/>
+				<i
+					class="fas fa-usd-square mr-3 pointer text-md text-success"
+					v-b-modal.monthly-edit
+					@click="setMonthly(monthly)"
+					v-b-tooltip.hover
+					title="Pay with other than default settings"
 				/>
 				<span v-b-tooltip.hover :title="monthly.description" class="font-weight-bold">{{ monthly.name }}</span>
 				<span
 					class="float-right width-75 font-weight-bold text-right"
 				>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : 0) }}</span>
-				<span class="width-60 mr-2 text-info text-sm font-weight-bold">- {{ `Due ${monthly.due_date}` }}</span>
+				<span
+					class="width-60 mr-2 text-info text-sm font-weight-bold"
+				>- {{ `${formatDueDate(new Date())} ${monthly.due_date}` }}</span>
 				<span
 					v-if="!monthly.this_month.length && monthly.default_account"
 					class="mr-2 pointer float-right pb-1 text-sm font-italic font-weight-bold text-primary"
@@ -71,6 +82,9 @@ export default {
 		},
 		formatMonth(date) {
 			return dateFns.format(date, "MMM YYYY");
+		},
+		formatDueDate(date) {
+			return dateFns.format(date, "MMM");
 		},
 		setMonthly(monthly) {
 			this.modal_monthly = { ...monthly };
