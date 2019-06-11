@@ -2,8 +2,6 @@
 
 TODO:
 
-Add icon to MonthliesCard.vue to allow paying while not using default settings
-
-Add saveAccount functionality to AccountEdit.vue for changing account details
-
-Add transaction functionality to all three (only quikpay on Monthlies has been set)
+Things that aren't working quite right:
+Adding an expense to a CC in accounts and also adding the CC monthly to the transaction results in both the balance and the amount paid going up
+Adding a paycheck doesn't do anything...

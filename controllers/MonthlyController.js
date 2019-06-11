@@ -1,23 +1,14 @@
 import Monthly from '../models/Monthly';
 import MonthlySchema from '../models/MonthlySchema';
 import UserSchema from '../models/UserSchema';
-import Transaction from '../models/Transaction';
 import TransactionSchema from '../models/TransactionSchema';
 const monthly_model = new Monthly(MonthlySchema);
-const transaction_model = new Transaction(TransactionSchema);
-import { addTransactions } from '../lib/ControllerHelpers';
 
 export default {
 
    async index(req, res) {
       try {
-         const response = await monthly_model.find(req.params, req.user.id);
-         console.log('response:::', response);
-
-         const transactions_month = await transaction_model.transactionsThisMonth(req.user.id);
-         const transactions_30 = await transaction_model.transactionsLast30Days(req.user.id);
-
-         const monthlies = addTransactions(response, 'monthly', transactions_month, transactions_30);
+         const monthlies = await monthly_model.find(req.params, req.user.id);
          res.json(monthlies);
       } catch (e) {
          console.log(e);

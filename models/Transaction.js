@@ -21,7 +21,9 @@ class Transaction {
 
    async transactionsByDateRange(user_id, from_date, to_date) {
       // pass dates in 'Jan 1, 2019' format
-      return await this.Transaction.find({ date: { $gt: new Date(from_date), $lte: new Date(to_date) }, user: user_id })
+      const from = dateFns.subHours(new Date(from_date), 6);
+      const to = dateFns.subHours(new Date(to_date), 6);
+      return await this.Transaction.find({ date: { $gte: from, $lte: to }, user: user_id })
    }
 
    async transactionsThisMonth(user_id) {
@@ -29,13 +31,13 @@ class Transaction {
       const date = new Date();
       const month = months[date.getUTCMonth()];
       const year = date.getUTCFullYear();
-      const from = `${month} 1, ${year}`;
-      return await this.Transaction.find({ date: { $gt: new Date(from) }, user: user_id })
+      const from = dateFns.subHours(new Date(`${month} 1, ${year}`), 6);
+      return await this.Transaction.find({ date: { $gte: from }, user: user_id })
    }
 
    async transactionsLast30Days(user_id) {
       const from = dateFns.subDays(new Date(), 30);
-      return await this.Transaction.find({ date: { $gte: new Date(from) }, user: user_id })
+      return await this.Transaction.find({ date: { $gte: from }, user: user_id })
    }
 }
 

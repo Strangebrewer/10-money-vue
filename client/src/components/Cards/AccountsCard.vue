@@ -16,7 +16,7 @@
 				<i
 					class="fas fa-usd-square mr-3 pointer text-md text-success"
 					@click="setAccount(account)"
-					v-b-modal.account-edit
+					v-b-modal.account-transaction
 					v-b-tooltip.hover
 					title="Record a new transaction for this account"
 				/>
@@ -25,16 +25,19 @@
 			</b-list-group-item>
 		</b-list-group>
 		<account-edit-modal v-if="modal_account.name" :account="modal_account" id="account-edit"/>
+      <account-transaction-modal :account="modal_account" id="account-transaction"/>
 	</b-card>
 </template>
 
 <script>
 import AccountEditModal from "../Modals/AccountEdit";
+import AccountTransactionModal from '../Modals/AccountTransaction';
 import formatMoney from "../../lib/formatMoney";
 
 export default {
    components: {
-      AccountEditModal
+      AccountEditModal,
+      AccountTransactionModal
    },
 	data() {
 		return {

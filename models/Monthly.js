@@ -1,3 +1,7 @@
+import Transaction from './Transaction';
+import TransactionSchema from './TransactionSchema';
+import { addTransactions } from '../lib/ControllerHelpers';
+const transaction_model = new Transaction(TransactionSchema);
 
 class Monthly {
    constructor(schema) {
@@ -15,8 +19,13 @@ class Monthly {
          populate = 'transactions'
       }
 
-      const monthlies = await this.Monthly.find(where)
+      const response = await this.Monthly.find(where)
          .populate(populate);
+
+         const transactions_month = await transaction_model.transactionsThisMonth(user_id);
+         const transactions_30 = await transaction_model.transactionsLast30Days(user_id);
+
+         const monthlies = addTransactions(response, 'monthly', transactions_month, transactions_30);
 
       return monthlies;
    }

@@ -6,18 +6,11 @@
 		<b-list-group>
 			<b-list-group-item v-for="monthly in monthlies" :key="monthly._id" class="p-2 m-1">
 				<i
-					class="fas fa-edit mr-1 ml-1 pointer text-md text-primary"
+					class="fas fa-edit mr-3 ml-1 pointer text-md text-primary"
 					v-b-modal.monthly-edit
 					@click="setMonthly(monthly)"
 					v-b-tooltip.hover
 					title="Edit this bill"
-				/>
-				<i
-					class="fas fa-usd-square mr-3 pointer text-md text-success"
-					v-b-modal.monthly-edit
-					@click="setMonthly(monthly)"
-					v-b-tooltip.hover
-					title="Pay with other than default settings"
 				/>
 				<span v-b-tooltip.hover :title="monthly.description" class="font-weight-bold">{{ monthly.name }}</span>
 				<span
@@ -65,7 +58,7 @@ import dateFns from "date-fns";
 
 export default {
 	components: {
-		MonthlyEditModal
+      MonthlyEditModal
 	},
 	data() {
 		return {

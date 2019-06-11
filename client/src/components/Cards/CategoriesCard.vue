@@ -1,6 +1,6 @@
 <template>
 	<b-card
-		:title="`Spending Categories - ${formatMonth(new Date())}`"
+		:title="`Categories - ${formatMonth(new Date())}`"
 		class="shadow border-primary text-left my-3"
 	>
 		<b-list-group>
