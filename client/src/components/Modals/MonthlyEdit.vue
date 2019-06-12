@@ -12,8 +12,15 @@
 		<label for="monthly-due-date" class="mt-3 mb-0">Due Date:</label>
 		<b-form-input id="monthly-due-date" v-model="modalMonthly.due_date"></b-form-input>
 
-		<label for="default-account" class="mt-3 mb-0">Default Account (optional):</label>
+		<label for="default-account" class="mt-3 mb-0">Default Source Account:</label>
 		<b-form-select v-model="modalMonthly.default_account" id="default-account">
+         <option :value="null">none</option>
+			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>
+		</b-form-select>
+
+		<label for="destination" class="mt-3 mb-0">Default Destination Account (optional):</label>
+		<b-form-select v-model="modalMonthly.destination" id="destination">
+         <option :value="null">none</option>
 			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>
 		</b-form-select>
 
@@ -25,6 +32,8 @@
 </template>
 
 <script>
+import formatMoney from '../../lib/formatMoney';
+
 export default {
 	props: ["monthly", "accounts", "id"],
 	computed: {

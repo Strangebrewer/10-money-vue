@@ -28,7 +28,12 @@
 			</b-list-group-item>
 		</b-list-group>
 
-		<category-edit-modal v-if="modal_category.name" :category="modal_category" id="category-edit"/>
+		<category-edit-modal
+			v-if="modal_category.name"
+			:accounts="accounts"
+			:category="modal_category"
+			id="category-edit"
+		/>
 
 		<category-transaction-modal id="category-transaction" :category="modal_category"/>
 	</b-card>
@@ -50,7 +55,7 @@ export default {
 			modal_category: {}
 		};
 	},
-	props: ["categories"],
+	props: ["categories", "accounts"],
 	methods: {
 		setCategory(category) {
 			this.modal_category = { ...category };

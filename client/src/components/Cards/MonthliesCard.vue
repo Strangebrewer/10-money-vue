@@ -15,7 +15,7 @@
 				<span v-b-tooltip.hover :title="monthly.description" class="font-weight-bold">{{ monthly.name }}</span>
 				<span
 					class="float-right width-75 font-weight-bold text-right"
-				>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : 0) }}</span>
+				>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : monthly.amount) }}</span>
 				<span
 					class="width-60 mr-2 text-info text-sm font-weight-bold"
 				>- {{ `${formatDueDate(new Date())} ${monthly.due_date}` }}</span>
@@ -58,7 +58,7 @@ import dateFns from "date-fns";
 
 export default {
 	components: {
-      MonthlyEditModal
+		MonthlyEditModal
 	},
 	data() {
 		return {
@@ -88,31 +88,54 @@ export default {
 				title: `Paying ${monthly.name}`,
 				text: "To use defaults, just click OK",
 				showCancelButton: true,
-				allowOutsideClick: true
+				allowOutsideClick: true,
+				input: "text",
+				inputValue: `$${parseFloat(monthly.amount).toFixed(2) / 100}`
 			};
-			if (!monthly.amount) {
-				(swal_options.text = "Enter an amount"), (swal_options.input = "text");
-			}
+
 			swal.fire(swal_options).then(async ({ value }) => {
+				let number_string = value;
+				if (value.includes("$")) number_string = value.replace("$", "");
+				if (
+					(value && parseInt(number_string) === NaN) ||
+					!/^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/.test(number_string)
+				) {
+					return swal.fire("you must enter a valid number");
+				}
+
 				if (value) {
-					if (isNaN(parseFloat(value)) && !monthly.amount) {
+					if (isNaN(parseFloat(number_string)) && !monthly.amount) {
 						swal.fire("Please enter a valid number");
 					}
-					let amount = parseFloat(value) * 100;
+					let amount = parseFloat(number_string) * 100;
 					if (typeof value === "string" && value.includes(".")) {
-						amount = parseFloat(value).toFixed(2) * 100;
+						amount = parseFloat(number_string).toFixed(2) * 100;
+					}
+					let next_transaction_data;
+					if (monthly.destination) {
+						next_transaction_data = {
+							amount,
+							account: monthly.destination,
+							source: monthly.default_account,
+							type: "payment"
+						};
 					}
 					const transaction_data = {
+						amount,
 						account: monthly.default_account,
 						monthly: monthly._id,
 						description: monthly.description,
-						amount: monthly.amount || amount
+						destination: monthly.destination
 					};
 					await this.$store.dispatch("postTransaction", transaction_data);
+					if (next_transaction_data) {
+						await this.$store.dispatch(
+							"postTransaction",
+							next_transaction_data
+						);
+					}
 					this.$store.dispatch("getMonthlies");
 					this.$store.dispatch("getAccounts");
-				} else {
-					swal.fire("Please enter a valid number");
 				}
 			});
 		}

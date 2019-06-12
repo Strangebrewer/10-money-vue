@@ -21,7 +21,7 @@
 
 <script>
 export default {
-   props: ["category", "id"],
+   props: ["category", "accounts", "id"],
    computed: {
       modalCategory() {
          return { ...this.category };
