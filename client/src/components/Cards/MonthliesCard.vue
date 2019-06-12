@@ -12,13 +12,17 @@
 					v-b-tooltip.hover
 					title="Edit this bill"
 				/>
+
 				<span v-b-tooltip.hover :title="monthly.description" class="font-weight-bold">{{ monthly.name }}</span>
+
 				<span
 					class="float-right width-75 font-weight-bold text-right"
 				>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : monthly.amount) }}</span>
+
 				<span
 					class="width-60 mr-2 text-info text-sm font-weight-bold"
 				>- {{ `${formatDueDate(new Date())} ${monthly.due_date}` }}</span>
+
 				<span
 					v-if="!monthly.this_month.length && monthly.default_account"
 					class="mr-2 pointer float-right pb-1 text-sm font-italic font-weight-bold text-primary"
@@ -26,12 +30,14 @@
 					title="Pay with default settings"
 					@click="quikPay(monthly)"
 				>quikpay</span>
+
 				<span
 					v-if="!monthly.this_month.length && !monthly.default_account"
 					class="mr-2 float-right pb-1 text-sm font-italic font-weight-bold text-secondary"
 					v-b-tooltip.hover
 					title="you must set a default account to use quikpay"
 				>quikpay</span>
+
 				<span
 					v-if="monthly.this_month.length"
 					class="mr-2 float-right text-sm font-italic font-weight-bold text-success"

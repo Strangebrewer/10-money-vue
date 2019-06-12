@@ -9,12 +9,10 @@ class Transaction {
 
    async find(user_id, req_params) {
       const where = { user: user_id };
-
       if (req_params.id)
          where._id = req_params.id;
-
       const transactions = await this.Transaction.find(where)
-         .populate('account_id')
+         .populate('account')
 
       return transactions;
    }

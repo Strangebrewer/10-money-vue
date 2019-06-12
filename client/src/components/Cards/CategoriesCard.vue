@@ -12,6 +12,7 @@
 					v-b-tooltip.hover
 					title="Edit this category"
 				/>
+
 				<i
 					class="fas fa-usd-square mr-3 pointer text-md text-success"
 					@click="setCategory(category)"
@@ -19,7 +20,9 @@
 					v-b-tooltip.hover
 					title="Record a new transaction in this category"
 				/>
+
 				<span v-b-tooltip.hover :title="category.description">{{ category.name }}</span>
+            
 				<span
 					class="float-right width-75 font-weight-bold text-right"
 					v-b-tooltip.hover

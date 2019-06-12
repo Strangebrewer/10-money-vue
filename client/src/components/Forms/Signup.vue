@@ -7,6 +7,7 @@
 			class="mr-sm-2"
 			placeholder="Username"
 		></b-form-input>
+
 		<b-form-input
 			v-model="form.password"
 			type="password"
