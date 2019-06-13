@@ -1,7 +1,6 @@
 
+last done:
+Editing categories is done
 
 TODO:
-
-Things that aren't working quite right:
-Adding an expense to a CC in accounts and also adding the CC monthly to the transaction results in both the balance and the amount paid going up
-Adding a paycheck doesn't do anything...
+fine-tune Category transactions

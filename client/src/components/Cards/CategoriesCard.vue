@@ -22,7 +22,7 @@
 				/>
 
 				<span v-b-tooltip.hover :title="category.description">{{ category.name }}</span>
-            
+
 				<span
 					class="float-right width-75 font-weight-bold text-right"
 					v-b-tooltip.hover

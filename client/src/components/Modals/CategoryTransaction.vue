@@ -31,7 +31,7 @@
 		<label for="destination" class="mt-3 mb-0">Default Destination Account (optional):</label>
 		<b-form-select v-model="modalMonthly.destination" id="destination">
 			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>
-		</b-form-select> -->
+		</b-form-select>-->
 
 		<template slot="modal-footer">
 			<b-button @click="$bvModal.hide(id)">Cancel</b-button>
@@ -48,8 +48,8 @@ export default {
 	data() {
 		return {
 			account: null,
-         description: "",
-         destination: null,
+			description: "",
+			destination: null,
 			amount: "",
 			date: ""
 		};
@@ -62,14 +62,14 @@ export default {
 	methods: {
 		async createTransaction() {
 			const { amount, account, date, description, category } = this;
-			if (!amount || !account || !date)
+			if (!amount || !date)
 				return swal.fire("you must fill out all required fields");
 			let parsed_amount = parseFloat(this.amount) * 100;
 			if (amount.includes(".")) {
 				parsed_amount = parseFloat(amount).toFixed(2) * 100;
-         }
-         // if it has a source account, it should be an expense transaction from the source
-         // and if it has a destination account, it should also create a payment transaction to the destination
+			}
+			// if it has a source account, it should be an expense transaction from the source
+			// and if it has a destination account, it should also create a payment transaction to the destination
 			const transaction_data = {
 				account,
 				date,

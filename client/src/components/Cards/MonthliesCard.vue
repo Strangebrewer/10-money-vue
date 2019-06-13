@@ -110,9 +110,6 @@ export default {
 				}
 
 				if (value) {
-					if (isNaN(parseFloat(number_string)) && !monthly.amount) {
-						swal.fire("Please enter a valid number");
-					}
 					let amount = parseFloat(number_string) * 100;
 					if (typeof value === "string" && value.includes(".")) {
 						amount = parseFloat(number_string).toFixed(2) * 100;
