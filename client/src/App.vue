@@ -34,4 +34,16 @@ html {
 .text-lg {
    font-size: 18px;
 }
+.width-90 {
+	min-width: 90px;
+}
+.width-75 {
+   min-width: 75px;
+}
+.width-60 {
+	min-width: 60px;
+}
+.pointer {
+	cursor: pointer;
+}
 </style>

@@ -7,18 +7,15 @@ class Category {
    constructor(schema) {
       if (!schema || typeof schema !== 'function')
          throw new Error('A valid schema must be given to use this model');
+
       this.Category = schema;
    }
 
    async find(req_params, user_id) {
       const where = { user: user_id };
-      let populate = '';
-      if (req_params.id) {
-         where._id = req_params.id;
-         populate = 'transactions'
-      }
-      const response = await this.Category.find(where)
-         .populate(populate);
+      if (req_params.id) where._id = req_params.id;
+      
+      const response = await this.Category.find(where);
 
       const transactions_month = await transaction_model.transactionsThisMonth(user_id);
       const transactions_30 = await transaction_model.transactionsLast30Days(user_id);

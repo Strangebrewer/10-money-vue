@@ -157,14 +157,5 @@ export default {
 };
 </script>
 
-<style>
-.width-75 {
-	min-width: 75px;
-}
-.width-60 {
-	min-width: 60px;
-}
-.pointer {
-	cursor: pointer;
-}
+<style scoped>
 </style>

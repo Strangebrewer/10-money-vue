@@ -24,7 +24,7 @@
 				<span v-b-tooltip.hover :title="category.description">{{ category.name }}</span>
 
 				<span
-					class="float-right width-75 font-weight-bold text-right"
+					class="float-right width-90 font-weight-bold text-right"
 					v-b-tooltip.hover
 					:title="`Rolling 30-Day total: ${moneyFormat(category.thirty_days.length ? moneyReduce(category.thirty_days) : 0)}`"
 				>{{ moneyFormat(category.this_month.length ? moneyReduce(category.this_month) : 0) }}</span>
@@ -135,12 +135,3 @@ export default {
 	}
 };
 </script>
-
-<style>
-.width-75 {
-	min-width: 75px;
-}
-.pointer {
-	cursor: pointer;
-}
-</style>
