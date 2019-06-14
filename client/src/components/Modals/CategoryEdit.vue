@@ -6,14 +6,8 @@
 		<label for="category-description" class="mt-3 mb-0">Description:</label>
 		<b-form-input id="category-description" v-model="modalCategory.description"></b-form-input>
 
-		<label for="default-account" class="mt-3 mb-0">Default Source Account:</label>
+		<label for="default-account" class="mt-3 mb-0">Default Account:</label>
 		<b-form-select v-model="modalCategory.default_account" id="default-account">
-			<option :value="null">none</option>
-			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>
-		</b-form-select>
-
-		<label for="destination" class="mt-3 mb-0">Default Destination Account (optional):</label>
-		<b-form-select v-model="modalCategory.destination" id="destination">
 			<option :value="null">none</option>
 			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>
 		</b-form-select>
@@ -69,18 +63,9 @@ export default {
 				_id,
 				default_account,
 				description,
-				destination,
 				name,
 				type
 			} = this.modalCategory;
-
-			if (type === "income" && !destination) {
-				return swal.fire(
-					"Income categories must have a corresponding destination account.",
-					null,
-					"warning"
-				);
-			}
 
 			let default_amount = parseFloat(this.modalCategory.default_amount) * 100;
 			if (typeof given_amount === "string" && given_amount.includes(".")) {
@@ -92,13 +77,17 @@ export default {
 				default_account,
 				default_amount,
 				description,
-				destination,
 				name,
 				type
 			};
 
          await this.$store.dispatch("updateCategory", category_data);
-         swal.fire('Category has been updated!', null, "success");
+         swal.fire({
+            title: 'Category has been updated!',
+            type: 'success',
+            scrollbarPadding: false,
+            backdrop: '#076fb8bc'
+         });
 			this.$store.dispatch("getCategories");
 			this.$refs[this.id].hide();
 		}

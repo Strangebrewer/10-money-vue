@@ -3,4 +3,10 @@ last done:
 Editing categories is done
 
 TODO:
-fine-tune Category transactions
+Make MonthlyEdit.vue saveMonthly() && AccountEdit.vue saveAccount() functionality look/work like saveCategory() in CategoryEdit.vue (money validation, parseFloat, sweetalert);
+
+Make the monthly edit modal also display like in the category edit modal.
+
+
+
+**I think most, maybe all, transactions are ironed out. We'll see if any other problems crop up...

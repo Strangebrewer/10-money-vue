@@ -9,8 +9,7 @@ const CategorySchema = new Schema({
    type: { type: String, enum: ['expense', 'income'], default: 'expense' },
    default_amount: Number,
    user: { type: Schema.Types.ObjectId, ref: 'User' },
-   default_account: { type: Schema.Types.ObjectId, ref: 'Account' },   
-   destination: { type: Schema.Types.ObjectId, ref: 'Account' }
+   default_account: { type: Schema.Types.ObjectId, ref: 'Account' }
 }, { timestamps: true });
 
 export default mongoose.model('Category', CategorySchema);

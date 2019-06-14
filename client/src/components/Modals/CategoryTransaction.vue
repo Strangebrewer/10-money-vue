@@ -1,13 +1,8 @@
 <template>
 	<b-modal :id="id" :ref="id" :title="`New Transaction for ${category.name}`">
-		<label for="account" class="mb-0">Source Account</label>
+		<label for="account" class="mb-0">Account</label>
 		<b-form-select v-model="account" id="account">
 			<option v-for="account of accounts" :key="account._id" :value="account._id">{{ account.name }}</option>
-		</b-form-select>
-
-		<label for="destination" class="mt-3 mb-0">Destination Account</label>
-		<b-form-select v-model="destination" id="destination">
-			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>
 		</b-form-select>
 
 		<label for="transaction-amount" class="mt-3 mb-0">Amount*</label>
@@ -23,19 +18,9 @@
 		<label for="transaction-description" class="mt-3 mb-0">Description</label>
 		<b-form-input id="transaction-description" v-model="description"></b-form-input>
 
-		<!-- <label for="default-account" class="mt-3 mb-0">Default Source Account (optional):</label>
-		<b-form-select v-model="modalMonthly.default_account" id="default-account">
-			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>
-		</b-form-select>
-
-		<label for="destination" class="mt-3 mb-0">Default Destination Account (optional):</label>
-		<b-form-select v-model="modalMonthly.destination" id="destination">
-			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>
-		</b-form-select>-->
-
 		<template slot="modal-footer">
-			<b-button @click="$bvModal.hide(id)">Cancel</b-button>
-			<b-button @click="createTransaction">Submit</b-button>
+			<b-button @click="closeModal">{{`${count ? 'Close' : 'Cancel'}`}}</b-button>
+			<b-button @click="createTransaction">{{`${count ? 'Repeat?' : 'Submit'}`}}</b-button>
 		</template>
 	</b-modal>
 </template>
@@ -44,52 +29,79 @@
 import swal from "sweetalert2";
 
 export default {
-	props: ["id", "category"],
+   props: ["id", "category"],
+   
 	data() {
 		return {
 			account: null,
 			description: "",
 			destination: null,
 			amount: "",
-			date: ""
+         date: "",
+         count: 0
 		};
-	},
+   },
+   
 	computed: {
 		accounts() {
 			return this.$store.state.account.all;
 		}
-	},
+   },
+   
 	methods: {
+      closeModal() {
+			this.$refs[this.id].hide();
+         this.resetForm();
+      },
+
 		async createTransaction() {
 			const { amount, account, date, description, category } = this;
 			if (!amount || !date)
-				return swal.fire("you must fill out all required fields");
+				return swal.fire("Please fill out all required fields");
+
+			let amount_string = amount;
+         if (amount.includes("$")) amount_string = amount.replace("$", "");
+         
+			const testes = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/.test(amount_string);
+			if ((amount && parseInt(amount_string) === NaN) || !testes) {
+				return swal.fire("you must enter a valid number");
+			}
+
 			let parsed_amount = parseFloat(this.amount) * 100;
 			if (amount.includes(".")) {
 				parsed_amount = parseFloat(amount).toFixed(2) * 100;
 			}
-			// if it has a source account, it should be an expense transaction from the source
-			// and if it has a destination account, it should also create a payment transaction to the destination
+
 			const transaction_data = {
 				account,
 				date,
 				description,
 				amount: parsed_amount,
 				category: category._id,
-				type: category.type
+				type: category.type === "income" ? "payment" : "expense"
 			};
-			console.log("transaction_data:::", transaction_data);
-			await this.$store.dispatch("postTransaction", transaction_data);
-			this.resetForm();
+         console.log("transaction_data:::", transaction_data);
+         
+         await this.$store.dispatch("postTransaction", transaction_data);
 			this.$store.dispatch("getAccounts");
-			this.$store.dispatch("getCategories");
-			this.$refs[this.id].hide();
-		},
+         this.$store.dispatch("getCategories");
+         
+         this.count++;
+         swal.fire({
+            title: 'transaction recorded',
+            toast: true,
+            type: 'success',
+            position: 'top',
+            timer: 1500
+         });
+      },
+      
 		resetForm() {
 			this.account = null;
 			this.description = "";
 			this.amount = "";
 			this.date = "";
+         this.count = 0;
 		}
 	}
 };

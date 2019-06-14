@@ -18,7 +18,7 @@
 			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>
 		</b-form-select>
 
-		<label for="destination" class="mt-3 mb-0">Default Destination Account (optional):</label>
+		<label for="destination" class="mt-3 mb-0">Default Destination Account:</label>
 		<b-form-select v-model="modalMonthly.destination" id="destination">
 			<option :value="null">none</option>
 			<option :value="account._id" v-for="account of accounts" :key="account._id">{{ account.name }}</option>

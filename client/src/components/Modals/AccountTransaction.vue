@@ -34,8 +34,8 @@
 		</b-form-select>
 
 		<template slot="modal-footer">
-			<b-button @click="$bvModal.hide(id)">Cancel</b-button>
-			<b-button @click="createTransaction">Submit</b-button>
+			<b-button @click="closeModal">{{`${count ? 'Close' : 'Cancel'}`}}</b-button>
+			<b-button @click="createTransaction">{{`${count ? 'Repeat?' : 'Submit'}`}}</b-button>
 		</template>
 	</b-modal>
 </template>
@@ -44,7 +44,8 @@
 import swal from "sweetalert2";
 
 export default {
-	props: ["id", "account"],
+   props: ["id", "account"],
+   
 	data() {
 		return {
 			category: null,
@@ -52,18 +53,26 @@ export default {
 			description: "",
 			amount: "",
 			date: "",
-			type: "expense"
+         type: "expense",
+         count: 0
 		};
-	},
+   },
+   
 	computed: {
 		monthlies() {
 			return this.$store.state.monthly.all;
 		},
 		categories() {
 			return this.$store.state.category.all;
-		}
-	},
+      }
+   },
+   
 	methods: {
+      closeModal() {
+         this.$refs[this.id].hide();
+         this.resetForm();
+      },
+
 		async createTransaction() {
 			const {
 				account,
@@ -73,16 +82,21 @@ export default {
 				monthly,
 				type
          } = this;
+
          let amount = this.amount;
-         if (this.amount.includes("$")) amount = this.amount.replace("$", "")
-			if (amount && parseInt(amount) === NaN || !/^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/.test(amount))
-				return swal.fire("you must enter a valid number");
+         if (this.amount.includes("$")) amount = this.amount.replace("$", "");
+
+         const testes = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/.test(amount);
+			if (amount && parseInt(amount) === NaN || !testes)
+            return swal.fire("you must enter a valid number");            
 			if (!amount || !date)
-				return swal.fire("you must fill out all required fields");
+            return swal.fire("you must fill out all required fields");
+
 			let parsed_amount = parseFloat(amount) * 100;
 			if (amount.includes(".")) {
 				parsed_amount = parseFloat(amount).toFixed(2) * 100;
-			}
+         }
+         
 			const transaction_data = {
 				date,
 				description,
@@ -92,14 +106,23 @@ export default {
 				account: account._id,
 				amount: parsed_amount
 			};
-			console.log("transaction_data:::", transaction_data);
+         console.log("transaction_data:::", transaction_data);
+         
 			await this.$store.dispatch("postTransaction", transaction_data);
-			this.resetForm();
 			this.$store.dispatch("getAccounts");
 			this.$store.dispatch("getCategories");
-			this.$store.dispatch("getMonthlies");
-			this.$refs[this.id].hide();
-		},
+         this.$store.dispatch("getMonthlies");
+
+         this.count++;
+         swal.fire({
+            title: 'transaction recorded',
+            toast: true,
+            type: 'success',
+            position: 'top',
+            timer: 1500
+         });
+      },
+      
 		resetForm() {
 			this.category = null;
 			this.monthly = null;
@@ -107,6 +130,7 @@ export default {
 			this.amount = "";
 			this.date = "";
 			this.type = "expense";
+         this.count = 0;
 		}
 	}
 };

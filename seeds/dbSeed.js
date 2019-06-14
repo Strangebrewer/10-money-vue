@@ -11,7 +11,8 @@ import user_seed from './users.json';
 import account_seed from './accounts.json';
 import category_seed from './categories.json';
 import monthly_seed from './monthlies.json';
-import transaction_seed from './transactions.json';
+// import transaction_seed from './transactions.json';
+import transaction_seed from './transactions_two.json';
 
 const pw = bcrypt.hashSync('1234', bcrypt.genSaltSync(10), null);
 

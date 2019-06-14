@@ -35,7 +35,7 @@
 					v-if="!monthly.this_month.length && !monthly.default_account"
 					class="mr-2 float-right pb-1 text-sm font-italic font-weight-bold text-secondary"
 					v-b-tooltip.hover
-					title="you must set a default account to use quikpay"
+					title="you must set a default source account to use quikpay"
 				>quikpay</span>
 
 				<span
@@ -88,6 +88,13 @@ export default {
 		setMonthly(monthly) {
 			this.modal_monthly = { ...monthly };
 		},
+		formatTransactionDate(day) {
+			const date = new Date();
+			return `${dateFns.format(date, "MMM")} ${day}, ${dateFns.format(
+				date,
+				"YYYY"
+			)}`;
+		},
 		async quikPay(monthly) {
 			this.setMonthly(monthly);
 			const swal_options = {
@@ -100,46 +107,50 @@ export default {
 			};
 
 			swal.fire(swal_options).then(async ({ value }) => {
+				if (!value) return;
 				let number_string = value;
+
 				if (value.includes("$")) number_string = value.replace("$", "");
-				if (
-					(value && parseInt(number_string) === NaN) ||
-					!/^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/.test(number_string)
-				) {
+				const testes = /^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$/.test(number_string);
+				if ((value && parseInt(number_string) === NaN) || !testes) {
 					return swal.fire("you must enter a valid number");
 				}
 
-				if (value) {
-					let amount = parseFloat(number_string) * 100;
-					if (typeof value === "string" && value.includes(".")) {
-						amount = parseFloat(number_string).toFixed(2) * 100;
-					}
-					let next_transaction_data;
-					if (monthly.destination) {
-						next_transaction_data = {
-							amount,
-							account: monthly.destination,
-							source: monthly.default_account,
-							type: "payment"
-						};
-					}
-					const transaction_data = {
-						amount,
-						account: monthly.default_account,
-						monthly: monthly._id,
-						description: monthly.description,
-						destination: monthly.destination
-					};
-					await this.$store.dispatch("postTransaction", transaction_data);
-					if (next_transaction_data) {
-						await this.$store.dispatch(
-							"postTransaction",
-							next_transaction_data
-						);
-					}
-					this.$store.dispatch("getMonthlies");
-					this.$store.dispatch("getAccounts");
+				let amount = parseFloat(number_string) * 100;
+				if (typeof value === "string" && value.includes(".")) {
+					amount = parseFloat(number_string).toFixed(2) * 100;
 				}
+				let next_transaction_data;
+				if (monthly.destination) {
+					next_transaction_data = {
+						amount,
+						account: monthly.destination,
+						date: this.formatTransactionDate(monthly.due_date),
+						source: monthly.default_account,
+						type: "payment"
+					};
+				}
+				const transaction_data = {
+					amount,
+					account: monthly.default_account,
+					date: this.formatTransactionDate(monthly.due_date),
+					monthly: monthly._id,
+					description: monthly.description,
+					destination: monthly.destination
+				};
+				await this.$store.dispatch("postTransaction", transaction_data);
+				if (next_transaction_data) {
+					await this.$store.dispatch("postTransaction", next_transaction_data);
+				}
+				await this.$store.dispatch("getMonthlies");
+            swal.fire({
+               title: 'transaction recorded',
+               toast: true,
+               type: 'success',
+               position: 'top',
+               timer: 1500
+            });
+				this.$store.dispatch("getAccounts");
 			});
 		}
 	}
