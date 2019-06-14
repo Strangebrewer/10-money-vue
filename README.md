@@ -1,42 +1,5 @@
-<h1 align="center">Welcome to Money Vue 👋</h1>
-<p>
-  <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <a href="www.shiteheel.com">
-    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
-  </a>
-  <a href="dbad-license.org">
-    <img alt="License: DBAD" src="https://img.shields.io/badge/License-DBAD-yellow.svg" target="_blank" />
-  </a>
-</p>
+# money-vue
 
-> Money tracker app  for keeping track of my finances as efficiently as possible. 
+This is my first project after building [a guitar tablature tracker](https://github.com/Strangebrewer/tab-tracker) by following [this FreeCodeCamp tutorial](https://www.youtube.com/watch?v=Fa4cRMaTDUI). I'm learning Vue, Vuex, and BootstrapVue because we use them at work.
 
-## Install
-
-```sh
-npm install
-```
-
-## Usage
-
-```sh
-npm run start
-```
-
-## Author
-
-👤 **Yours Truly**
-
-* Github: [@Strangebrewer](https://github.com/Strangebrewer)
-
-## Show your support
-
-Give a ⭐️ if this project helped you !
-
-## 📝 License
-
-Copyright © 2019 [Yours Truly](https://github.com/Strangebrewer).<br />
-This project is [DBAD](dbad-license.org) licensed.
-
-***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
+This is a remake of an older project because I wanted to have a ready-made API to build Vue on top of. I ended up rebuilding the API anyway. The original version was hopelessly overcomplicated. But that was an interesting experience in and of itself. It was the first time I'd ever built an API using only Postman to test and use it (I've always built front end and back end simultaneously). I kinda like doing it this way. It will be interesting to see how much I need to change it to adapt to the front end.
