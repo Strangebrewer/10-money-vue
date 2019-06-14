@@ -5,7 +5,7 @@ Editing categories is done
 TODO:
 Make MonthlyEdit.vue saveMonthly() && AccountEdit.vue saveAccount() functionality look/work like saveCategory() in CategoryEdit.vue (money validation, parseFloat, sweetalert);
 
-Make the monthly edit modal also display like in the category edit modal.
+Make the monthly edit modal also display amount like in the category edit modal.
 
 
 

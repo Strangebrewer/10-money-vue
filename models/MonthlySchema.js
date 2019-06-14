@@ -6,7 +6,7 @@ const MonthlySchema = new Schema({
    description: String,
    amount: { type: Number, required: true },
    user: { type: Schema.Types.ObjectId, ref: 'User' },
-   due_date: Number,
+   due_date: { type: Number, required: true },
    default_account: { type: Schema.Types.ObjectId, ref: 'Account' },
    destination: { type: Schema.Types.ObjectId, ref: 'Account' }
 }, { timestamps: true });

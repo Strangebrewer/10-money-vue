@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 // and it should have a corresponding beginning transaction with a destination
 
 // transactions that are payments to holdings (...vs. debt) that don't have sources would be... ding!ding!ding!, INCOME!
-// But no need to mark it as such in the db, I'm just making notes so I remember why I do this shizzle.
+// But no need to mark it as such in the db- I'm just making notes so I remember why I do this shizzle.
 const TransactionSchema = new Schema({
    account: { type: Schema.Types.ObjectId, ref: 'Account' },
    category: { type: Schema.Types.ObjectId, ref: 'Category' },
