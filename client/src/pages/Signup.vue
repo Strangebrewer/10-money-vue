@@ -2,7 +2,7 @@
 	<b-container fluid class="signup-page text-center my-5">
 		<b-row align-h="center">
 			<b-col cols="10" sm="8" md="6" lg="5" xl="4" class>
-				<b-card title="Sign Up" class="shadow border-primary text-left">
+				<b-card title="Create Your Account" class="shadow border-primary text-left">
 					<b-form @submit="onSubmit" @reset="onReset" v-if="show">
 						<b-form-group label="Username:" label-for="username">
 							<b-form-input id="username" v-model="form.username"></b-form-input>

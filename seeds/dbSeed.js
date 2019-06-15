@@ -23,6 +23,7 @@ async function seedDb() {
       await MonthlySchema.deleteMany({});
       await CategorySchema.deleteMany({});
       await UserSchema.deleteMany({});
+      return;
 
       user_seed.forEach(user => {
          user.password = pw;

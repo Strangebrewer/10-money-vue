@@ -1,5 +1,4 @@
 import Authentication from '../../api/Authentication';
-import Accounts from '../../api/Accounts';
 
 export default {
    async login({ commit }, credentials) {
@@ -29,7 +28,10 @@ export default {
    },
    logout({ commit }) {
       localStorage.removeItem('token');
-      commit('setUser', null)
+      commit('setUser', null);
+      commit('setMonthlies', null);
+      commit('setCategories', null);
+      commit('setAccounts', null);
    },
    async getCurrentUser({ commit }) {
       return new Promise((resolve, reject) => {
@@ -42,18 +44,6 @@ export default {
                resolve(user.data);
             })
             .catch(err => reject(err));
-      })
-   },
-
-
-
-   newAccount({ commit }, account_data) {
-      return new Promise((resolve, reject) => {
-         Accounts.post(account_data)
-            .then(account => {
-               return resolve(account.data)
-            })
-            .catch(err => reject(err))
       })
    }
 }

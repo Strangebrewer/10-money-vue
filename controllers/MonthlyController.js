@@ -22,19 +22,17 @@ export default {
       try {
          const exists = await MonthlySchema.findOne({ name: req.body.name, user: req.user.id });
          if (exists) {
-            return res.status(400).send({ error: 'That monthly expense already exists' });
+            return res.status(400).send('That monthly bill already exists');
          }
-         req.body.user = req.user.id
+         req.body.user = req.user.id;
          const monthly = await MonthlySchema.create(req.body);
          await UserSchema.findByIdAndUpdate(req.user.id, {
             $push: { monthlies: monthly._id }
          });
          res.json(monthly);
       } catch (e) {
-         console.log(e);
-         res.status(500).send({
-            error: 'Something went wrong while creating your monthly expense'
-         })
+         console.log(e.message);
+         res.status(500).send('Something went wrong while creating your monthly expense');
       }
    },
 

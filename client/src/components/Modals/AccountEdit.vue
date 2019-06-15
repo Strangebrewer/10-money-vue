@@ -20,23 +20,28 @@
 </template>
 
 <script>
+import swal from "sweetalert2";
+
 export default {
 	props: ["account", "id"],
 	computed: {
 		modalAccount() {
-			return { ...this.account };
+			const { _id, name, description, type } = this.account;
+			return { _id, name, description, type };
 		}
 	},
 	methods: {
 		async saveAccount() {
-			const { name, type, description } = this.modalAccount;
-			const account_data = {
-				_id: this.modalAccount._id,
-				account_update: { name, type, description }
-			};
-         await this.$store.dispatch('updateAccount', account_data);
-         this.$store.dispatch('getAccounts');
+			const { _id, name, description, type } = this.modalAccount;
+			const account_data = { _id, account_update: { name, type, description } };
+			await this.$store.dispatch("updateAccount", account_data);
 			this.$refs[this.id].hide();
+         swal.fire({
+            title: 'Account has been updated!',
+            type: 'success',
+            scrollbarPadding: false
+         });
+			this.$store.dispatch("getAccounts");
 		}
 	}
 };

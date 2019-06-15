@@ -22,7 +22,7 @@ export default {
       try {
          const exists = await CategorySchema.findOne({ name: req.body.name, user: req.user.id });
          if (exists) {
-            return res.status(400).send({ error: 'That category already exists' });
+            return res.status(400).send('That category already exists');
          }
          req.body.user = req.user.id
          const category = await CategorySchema.create(req.body);

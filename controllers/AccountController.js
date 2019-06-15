@@ -20,6 +20,10 @@ export default {
 
    async post(req, res) {
       try {
+         const exists = await AccountSchema.findOne({ name: req.body.name, user: req.user.id });
+         if (exists) {
+            res.status(400).send('That account name already exists');
+         }
          req.body.user = req.user.id;
          const account = await AccountSchema.create(req.body);
          await UserSchema.findByIdAndUpdate(req.user.id, {
@@ -28,9 +32,7 @@ export default {
          res.json(account);
       } catch (e) {
          console.log(e);
-         res.status(500).send({
-            error: 'Something went wrong while creating your account'
-         })
+         res.status(400).send(e.message);
       }
    },
 

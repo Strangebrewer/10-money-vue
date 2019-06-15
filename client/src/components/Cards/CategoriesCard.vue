@@ -1,8 +1,14 @@
 <template>
 	<b-card
 		:title="`Categories - ${formatMonth(new Date())}`"
-		class="shadow border-primary text-left my-3"
+		class="shadow border-primary text-left my-3 position-relative"
 	>
+		<i
+			class="fas fa-plus-circle position-absolute text-info"
+			v-b-modal.create-category
+			v-b-tooltip.hover
+			title="Add a new category"
+		/>
 		<b-list-group>
 			<b-list-group-item v-for="category in categories" :key="category._id" class="p-2 m-1">
 				<i
@@ -54,12 +60,15 @@
 		/>
 
 		<category-transaction-modal id="category-transaction" :category="modal_category"/>
+
+		<new-category-modal id="create-category"/>
 	</b-card>
 </template>
 
 <script>
 import CategoryEditModal from "../Modals/CategoryEdit";
 import CategoryTransactionModal from "../Modals/CategoryTransaction";
+import NewCategoryModal from "../Modals/NewCategory";
 import formatMoney from "../../lib/formatMoney";
 import swal from "sweetalert2";
 import dateFns from "date-fns";
@@ -67,7 +76,8 @@ import dateFns from "date-fns";
 export default {
 	components: {
 		CategoryEditModal,
-		CategoryTransactionModal
+		CategoryTransactionModal,
+		NewCategoryModal
 	},
 	data() {
 		return {
@@ -116,22 +126,31 @@ export default {
 				const transaction_data = {
 					amount,
 					account: category.default_account,
-               category: category._id,
+					category: category._id,
 					description: category.description,
 					type: category.type === "income" ? "payment" : "expense"
 				};
 				await this.$store.dispatch("postTransaction", transaction_data);
-            await this.$store.dispatch("getCategories");
-            swal.fire({
-               title: 'transaction recorded',
-               toast: true,
-               type: 'success',
-               position: 'top',
-               timer: 1500
-            });
+				await this.$store.dispatch("getCategories");
+				swal.fire({
+					title: "transaction recorded",
+					toast: true,
+					type: "success",
+					position: "top",
+					timer: 1500
+				});
 				this.$store.dispatch("getAccounts");
 			});
 		}
 	}
 };
 </script>
+
+<style>
+.position-absolute {
+	top: 20px;
+	right: 20px;
+	font-size: 24px;
+	cursor: pointer;
+}
+</style>

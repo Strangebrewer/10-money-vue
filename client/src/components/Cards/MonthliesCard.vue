@@ -1,8 +1,14 @@
 <template>
 	<b-card
 		:title="`Monthly Bills - ${formatMonth(new Date())}`"
-		class="shadow border-primary text-left my-3"
+		class="shadow border-primary text-left my-3 position-relative"
 	>
+		<i
+			class="fas fa-plus-circle position-absolute text-info"
+			v-b-modal.create-monthly
+			v-b-tooltip.hover
+			title="Add a new monthly bill"
+		/>
 		<b-list-group>
 			<b-list-group-item v-for="monthly in monthlies" :key="monthly._id" class="p-2 m-1">
 				<i
@@ -53,18 +59,21 @@
 			:accounts="accounts"
 			id="monthly-edit"
 		/>
+      <new-monthly-modal id="create-monthly"/>
 	</b-card>
 </template>
 
 <script>
 import MonthlyEditModal from "../Modals/MonthlyEdit";
+import NewMonthlyModal from '../Modals/NewMonthly';
 import formatMoney from "../../lib/formatMoney";
 import swal from "sweetalert2";
 import dateFns from "date-fns";
 
 export default {
 	components: {
-		MonthlyEditModal
+      MonthlyEditModal,
+      NewMonthlyModal
 	},
 	data() {
 		return {
@@ -143,13 +152,13 @@ export default {
 					await this.$store.dispatch("postTransaction", next_transaction_data);
 				}
 				await this.$store.dispatch("getMonthlies");
-            swal.fire({
-               title: 'transaction recorded',
-               toast: true,
-               type: 'success',
-               position: 'top',
-               timer: 1500
-            });
+				swal.fire({
+					title: "transaction recorded",
+					toast: true,
+					type: "success",
+					position: "top",
+					timer: 1500
+				});
 				this.$store.dispatch("getAccounts");
 			});
 		}

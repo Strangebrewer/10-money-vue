@@ -1,11 +1,22 @@
 
 last done:
-Editing categories is done
+
 
 TODO:
-Make MonthlyEdit.vue saveMonthly() && AccountEdit.vue saveAccount() functionality look/work like saveCategory() in CategoryEdit.vue (money validation, parseFloat, sweetalert);
+Setup account detail component
+Setup category detail component
+Setup monthly detail component
+Setup Transactions page
 
-Make the monthly edit modal also display amount like in the category edit modal.
+Setup delete functionality for all of these
+Deleting a transaction is the only delete function that should should recalculate account balances (source, destination, etc);
+   It should delete associated transactions, too, such as CC payments. i.e. it should delete the checking debit as well as the CC payment.
+
+Deleting an account should delete all transactions on that account
+   It should also remove all references to it in the user's account, in categories, monthlies, and as source or destination in any transactions. But, it should not recalculate any other balances.
+
+Deleting a category or a monthly should remove any reference to it in transactions and in the user model.
+   But, it should not recalculate any balances - it's just the removal of tracking markers, but does not negate the actual expense.
 
 
 

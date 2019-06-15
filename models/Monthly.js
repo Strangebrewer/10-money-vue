@@ -17,7 +17,7 @@ class Monthly {
       const response = await this.Monthly.find(where);
 
       const transactions_month = await transaction_model.transactionsThisMonth(user_id);
-      const monthlies = addTransactions(response, 'monthly', transactions_month, transactions_30);
+      const monthlies = addTransactions(response, 'monthly', transactions_month);
 
       return monthlies;
    }

@@ -82,14 +82,13 @@ export default {
 			};
 
          await this.$store.dispatch("updateCategory", category_data);
+			this.$refs[this.id].hide();
          swal.fire({
             title: 'Category has been updated!',
             type: 'success',
-            scrollbarPadding: false,
-            backdrop: '#076fb8bc'
+            scrollbarPadding: false
          });
 			this.$store.dispatch("getCategories");
-			this.$refs[this.id].hide();
 		}
 	}
 };
