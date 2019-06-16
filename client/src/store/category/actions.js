@@ -31,5 +31,15 @@ export default {
             })
             .catch(err => reject(err));
       })
+   },
+   async getCategory({ commit }, category_id) {
+      return new Promise((resolve, reject) => {
+         Categories.index(category_id)
+            .then(res => {
+               commit('setCategory', res.data);
+               resolve(res.data);
+            })
+            .catch(err => reject(err));
+      })
    }
 }

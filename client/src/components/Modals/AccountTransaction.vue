@@ -4,7 +4,6 @@
 		<b-form-input
 			id="transaction-amount"
 			v-model="amount"
-			placeholder="e.g. '10' = $10; '10.56' = $10.56"
 		></b-form-input>
 
 		<label for="transaction-date" class="mt-3 mb-0">Date*</label>

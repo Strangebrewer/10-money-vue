@@ -31,5 +31,16 @@ export default {
             })
             .catch(err => reject(err));
       })
+   },
+   async getAccount({ commit }, account_id) {
+      return new Promise((resolve, reject) => {
+         Accounts.index(account_id)
+            .then(res => {
+               console.log('res:::', res);
+               commit('setAccount', res.data[0]);
+               resolve(res.data);
+            })
+            .catch(err => reject(err));
+      })
    }
 }

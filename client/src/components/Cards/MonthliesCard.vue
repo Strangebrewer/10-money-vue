@@ -1,83 +1,93 @@
 <template>
-	<b-card
-		:title="`Monthly Bills - ${formatMonth(new Date())}`"
-		class="shadow border-primary text-left my-3 position-relative"
-	>
+	<b-card class="shadow border-primary text-left my-3 position-relative">
+		<b-card-title class="pointer" v-b-toggle.monthly-collapse @click="toggleShow">
+			<i :class="`fas fa-caret-${show ? 'down' : 'right'} text-lg text-secondary`"/>
+			<span class="position-absolute title-text">{{`Monthly Bills - ${formatMonth(new Date())}`}}</span>
+		</b-card-title>
 		<i
 			class="fas fa-plus-circle position-absolute text-info"
 			v-b-modal.create-monthly
 			v-b-tooltip.hover
 			title="Add a new monthly bill"
 		/>
-		<b-list-group>
-			<b-list-group-item v-for="monthly in monthlies" :key="monthly._id" class="p-2 m-1">
-				<i
-					class="fas fa-edit mr-3 ml-1 pointer text-md text-primary"
-					v-b-modal.monthly-edit
-					@click="setMonthly(monthly)"
-					v-b-tooltip.hover
-					title="Edit this bill"
-				/>
 
-				<span v-b-tooltip.hover :title="monthly.description" class="font-weight-bold">{{ monthly.name }}</span>
+		<b-collapse id="monthly-collapse">
+			<b-list-group>
+				<b-list-group-item v-for="monthly in monthlies" :key="monthly._id" class="p-2 m-1">
+					<i
+						class="fas fa-edit mr-3 ml-1 pointer text-md text-primary"
+						v-b-modal.monthly-edit
+						@click="setMonthly(monthly)"
+						v-b-tooltip.hover
+						title="Edit this bill"
+					/>
 
-				<span
-					class="float-right width-75 font-weight-bold text-right"
-				>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : monthly.amount) }}</span>
+					<span
+						v-b-tooltip.hover
+						:title="monthly.description"
+						class="font-weight-bold"
+					>{{ monthly.name }}</span>
 
-				<span
-					class="width-60 mr-2 text-info text-sm font-weight-bold"
-				>- {{ `${formatDueDate(new Date())} ${monthly.due_date}` }}</span>
+					<span
+						class="float-right width-75 font-weight-bold text-right"
+					>{{ moneyFormat(monthly.this_month.length ? moneyReduce(monthly.this_month) : monthly.amount) }}</span>
 
-				<span
-					v-if="!monthly.this_month.length && monthly.default_account"
-					class="mr-2 pointer float-right pb-1 text-sm font-italic font-weight-bold text-primary"
-					v-b-tooltip.hover
-					title="Pay with default settings"
-					@click="quikPay(monthly)"
-				>quikpay</span>
+					<span
+						class="width-60 mr-2 text-info text-sm font-weight-bold"
+					>- {{ `${formatDueDate(new Date())} ${monthly.due_date}` }}</span>
 
-				<span
-					v-if="!monthly.this_month.length && !monthly.default_account"
-					class="mr-2 float-right pb-1 text-sm font-italic font-weight-bold text-secondary"
-					v-b-tooltip.hover
-					title="you must set a default source account to use quikpay"
-				>quikpay</span>
+					<span
+						v-if="!monthly.this_month.length && monthly.default_account"
+						class="mr-2 pointer float-right pb-1 text-sm font-italic font-weight-bold text-primary"
+						v-b-tooltip.hover
+						title="Pay with default settings"
+						@click="quikPay(monthly)"
+					>quikpay</span>
 
-				<span
-					v-if="monthly.this_month.length"
-					class="mr-2 float-right text-sm font-italic font-weight-bold text-success"
-				>
-					paid
-					<i class="fas fa-check-circle"/>
-				</span>
-			</b-list-group-item>
-		</b-list-group>
+					<span
+						v-if="!monthly.this_month.length && !monthly.default_account"
+						class="mr-2 float-right pb-1 text-sm font-italic font-weight-bold text-secondary"
+						v-b-tooltip.hover
+						title="you must set a default source account to use quikpay"
+					>quikpay</span>
+
+					<span
+						v-if="monthly.this_month.length"
+						class="mr-2 float-right text-sm font-italic font-weight-bold text-success"
+					>
+						paid
+						<i class="fas fa-check-circle"/>
+					</span>
+				</b-list-group-item>
+			</b-list-group>
+		</b-collapse>
+
 		<monthly-edit-modal
 			v-if="modal_monthly.name"
 			:monthly="modal_monthly"
 			:accounts="accounts"
 			id="monthly-edit"
 		/>
-      <new-monthly-modal id="create-monthly"/>
+		<new-monthly-modal id="create-monthly"/>
 	</b-card>
 </template>
 
 <script>
 import MonthlyEditModal from "../Modals/MonthlyEdit";
-import NewMonthlyModal from '../Modals/NewMonthly';
+import NewMonthlyModal from "../Modals/NewMonthly";
 import formatMoney from "../../lib/formatMoney";
 import swal from "sweetalert2";
 import dateFns from "date-fns";
 
 export default {
 	components: {
-      MonthlyEditModal,
-      NewMonthlyModal
+		MonthlyEditModal,
+		NewMonthlyModal
 	},
 	data() {
 		return {
-			modal_monthly: {}
+			modal_monthly: {},
+			show: false
 		};
 	},
 	props: ["monthlies", "accounts"],
@@ -103,6 +113,9 @@ export default {
 				date,
 				"YYYY"
 			)}`;
+		},
+		toggleShow() {
+			this.show = !this.show;
 		},
 		async quikPay(monthly) {
 			this.setMonthly(monthly);
@@ -167,4 +180,7 @@ export default {
 </script>
 
 <style scoped>
+.title-text {
+	left: 40px;
+}
 </style>
