@@ -1,8 +1,7 @@
 <template>
 	<div class="account">
-		<div v-if="loading">Loading...</div>
-		<div v-if="error">Loading...</div>
-		<div v-if="account">{{account}}</div>
+		<div v-if="loading" class="loading">Loading...</div>
+      
 	</div>
 </template>
 
@@ -10,29 +9,26 @@
 export default {
 	data() {
 		return {
-			loading: false,
-			account: null,
+         account: null,
+			loading: true,
 			error: null
 		};
 	},
 	async created() {
-		this.fetchAccount();
-		await this.$store.dispatch("getAccount", this.$route.params.id);
+		this.getAccount();
 	},
 	methods: {
-		async fetchAccount() {
-         this.error = this.account = null;
-         this.loading = true;
-         await this.$store.dispatch("getAccount", this.$route.params.id);
-         this.loading = false;
-         this.account = this.$store.state.account.current;
+		async getAccount() {
+			try {
+				await this.$store.dispatch("getAccount", this.$route.params.id);
+				this.loading = false;
+				this.account = this.$store.state.account.current;
+				console.log("this.account:::", this.account);
+			} catch (e) {
+				this.loading = false;
+				this.error = e.message;
+			}
 		}
-	},
-	mounted() {
-		console.log(
-			"this.$store.state.account.current:::",
-			this.$store.state.account.current
-		);
 	}
 };
 </script>

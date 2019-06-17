@@ -28,11 +28,13 @@ export default new Router({
       {
          path: '/account/:id',
          name: 'account-detail',
+         props: true,
          component: Account
       },
       {
          path: '/category/:id',
          name: 'category-detail',
+         props: true,
          component: Category
       }
    ]

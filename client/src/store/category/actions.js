@@ -36,7 +36,7 @@ export default {
       return new Promise((resolve, reject) => {
          Categories.index(category_id)
             .then(res => {
-               commit('setCategory', res.data);
+               commit('setCategory', res.data[0]);
                resolve(res.data);
             })
             .catch(err => reject(err));

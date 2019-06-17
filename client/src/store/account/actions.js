@@ -36,7 +36,6 @@ export default {
       return new Promise((resolve, reject) => {
          Accounts.index(account_id)
             .then(res => {
-               console.log('res:::', res);
                commit('setAccount', res.data[0]);
                resolve(res.data);
             })
