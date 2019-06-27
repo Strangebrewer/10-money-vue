@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import formatMoney from "../lib/formatMoney";
+import formatMoney from "../utils/formatMoney";
 
 export default {
 	data() {

@@ -1,15 +1,18 @@
 import express from 'express';
 const router = express.Router();
-import user_routes from './users';
-import transaction_routes from './transactions';
-import category_routes from './categories';
-import account_routes from './accounts';
-import monthly_routes from './monthlies';
 
+import base_routes from './base';
+import user_routes from './users';
+
+router.use('/accounts', addUrlToReqBody, base_routes);
+router.use('/categories', addUrlToReqBody, base_routes);
+router.use('/monthlies', addUrlToReqBody, base_routes);
+router.use('/transactions', addUrlToReqBody, base_routes);
 router.use('/users', user_routes);
-router.use('/transactions', transaction_routes);
-router.use('/categories', category_routes);
-router.use('/monthlies', monthly_routes);
-router.use('/accounts', account_routes);
+
+function addUrlToReqBody(req, res, next) {
+   req.body.url = req.baseUrl.replace('/', '');
+   next();
+}
 
 export default router;

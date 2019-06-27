@@ -7,12 +7,16 @@ class Transaction {
       this.Transaction = schema;
    }
 
-   async find(user_id, req_params) {
+   async find(req_params, user_id) {
       const where = { user: user_id };
       if (req_params.id)
          where._id = req_params.id;
       const transactions = await this.Transaction.find(where)
          .populate('account')
+         .populate('category')
+         .populate('monthly')
+         .populate('source')
+         .populate('destination');
 
       return transactions;
    }

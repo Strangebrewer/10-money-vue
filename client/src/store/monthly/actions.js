@@ -1,10 +1,10 @@
-import Monthlies from '../../api/Monthlies';
+import API from '../../utils/API';
 
 export default {
    async updateMonthly({ commit }, monthly_data) {
       const { _id, monthly_update } = monthly_data;
       return new Promise((resolve, reject) => {
-         Monthlies.put(_id, monthly_update)
+         API.put('monthlies',_id, monthly_update)
             .then(res => {
                commit('setMonthly', res.data);
                resolve(res.data);
@@ -14,7 +14,7 @@ export default {
    },
    async newMonthly({ commit }, monthly_data) {
       return new Promise((resolve, reject) => {
-         Monthlies.post(monthly_data)
+         API.post('monthlies',monthly_data)
             .then(res => {
                commit('setMonthly', res.data);
                resolve(res.data);
@@ -24,7 +24,7 @@ export default {
    },
    async getMonthlies({ commit }) {
       return new Promise((resolve, reject) => {
-         Monthlies.index()
+         API.index('monthlies')
             .then(res => {
                commit('setMonthlies', res.data);
                resolve(res.data);

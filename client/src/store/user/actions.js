@@ -1,9 +1,9 @@
-import Authentication from '../../api/Authentication';
+import API, { APIlogin } from '../../utils/API';
 
 export default {
    async login({ commit }, credentials) {
       return new Promise((resolve, reject) => {
-         Authentication.login(credentials)
+         APIlogin(credentials)
             .then(user => {
                commit('setUser', user.data.user);
                commit('setMonthlies', user.data.user.monthlies);
@@ -17,7 +17,7 @@ export default {
    },
    async register({ commit }, user_data) {
       return new Promise((resolve, reject) => {
-         Authentication.register(user_data)
+         API.post('users', user_data)
             .then(user => {
                commit('setUser', user.data.user);
                localStorage.setItem('token', user.data.token);
@@ -35,7 +35,7 @@ export default {
    },
    async getCurrentUser({ commit }) {
       return new Promise((resolve, reject) => {
-         Authentication.getCurrentUser()
+         API.index('users')
             .then(user => {
                commit('setUser', user.data);
                commit('setMonthlies', user.data.monthlies);

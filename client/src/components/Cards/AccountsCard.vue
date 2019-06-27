@@ -49,7 +49,7 @@
 import AccountEditModal from "../Modals/AccountEdit";
 import AccountTransactionModal from "../Modals/AccountTransaction";
 import NewAccountModal from "../Modals/NewAccount";
-import formatMoney from "../../lib/formatMoney";
+import formatMoney from "../../utils/formatMoney";
 
 export default {
 	components: {

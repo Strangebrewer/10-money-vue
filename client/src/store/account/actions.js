@@ -1,9 +1,9 @@
-import Accounts from '../../api/Accounts';
+import API from '../../utils/API';
 
 export default {
    async getAccounts({ commit }) {
       return new Promise((resolve, reject) => {
-         Accounts.index()
+         API.index('accounts')
             .then(res => {
                commit('setAccounts', res.data);
                resolve(res.data);
@@ -13,7 +13,7 @@ export default {
    },
    async newAccount({ commit }, account_data) {
       return new Promise((resolve, reject) => {
-         Accounts.post(account_data)
+         API.post('accounts', account_data)
             .then(res => {
                commit('setAccount', res.data);
                resolve(res.data);
@@ -24,7 +24,7 @@ export default {
    async updateAccount({ commit }, account_data) {
       const { _id, account_update } = account_data;
       return new Promise((resolve, reject) => {
-         Accounts.put(_id, account_update)
+         API.put('accounts', _id, account_update)
             .then(res => {
                commit('setAccount', res.data);
                resolve(res.data);
@@ -34,7 +34,7 @@ export default {
    },
    async getAccount({ commit }, account_id) {
       return new Promise((resolve, reject) => {
-         Accounts.index(account_id)
+         API.index('accounts', account_id)
             .then(res => {
                commit('setAccount', res.data[0]);
                resolve(res.data);

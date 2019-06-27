@@ -75,7 +75,7 @@
 <script>
 import MonthlyEditModal from "../Modals/MonthlyEdit";
 import NewMonthlyModal from "../Modals/NewMonthly";
-import formatMoney from "../../lib/formatMoney";
+import formatMoney from "../../utils/formatMoney";
 import swal from "sweetalert2";
 import dateFns from "date-fns";
 

@@ -73,7 +73,7 @@
 import CategoryEditModal from "../Modals/CategoryEdit";
 import CategoryTransactionModal from "../Modals/CategoryTransaction";
 import NewCategoryModal from "../Modals/NewCategory";
-import formatMoney from "../../lib/formatMoney";
+import formatMoney from "../../utils/formatMoney";
 import swal from "sweetalert2";
 import dateFns from "date-fns";
 

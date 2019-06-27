@@ -1,9 +1,9 @@
-import Transactions from '../../api/Transactions';
+import API from '../../utils/API';
 
 export default {
    async postTransaction({ commit }, transaction_data) {
       return new Promise((resolve, reject) => {
-         Transactions.post(transaction_data)
+         API.post('transactions', transaction_data)
             .then(res => {
                commit('setTransaction', res.data);
                resolve(res.data);
@@ -13,7 +13,7 @@ export default {
    },
    async getTransactions({ commit }) {
       return new Promise((resolve, reject) => {
-         Monthlies.index()
+         API.index('transactions')
             .then(res => {
                commit('setTransactions', res.data);
                resolve(res.data);
