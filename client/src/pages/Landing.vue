@@ -1,6 +1,7 @@
 <template>
 	<b-container fluid class="landing text-center">
 		<b-jumbotron :header="msg"></b-jumbotron>
+        
 		<b-row v-if="loggedIn">
 			<b-col cols="12" sm="10" md="8" xl="6" offset-sm="1" offset-md="2" offset-xl="3">
 				<accounts-card :accounts="accounts"/>
@@ -31,7 +32,8 @@ export default {
 
 	data() {
 		return {
-			msg: "Shutcho Ass Up"
+            // msg: "Shutcho Ass Up"
+            msg: "Move Along, Nothin' To See Here"
 		};
    },
    
