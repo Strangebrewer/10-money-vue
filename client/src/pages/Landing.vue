@@ -3,15 +3,15 @@
 		<b-jumbotron :header="msg"></b-jumbotron>
         
 		<b-row v-if="loggedIn">
-			<b-col cols="12" sm="10" md="8" xl="6" offset-sm="1" offset-md="2" offset-xl="3">
+			<b-col cols="12" sm="10" md="8" lg="6" offset-sm="1" offset-md="2" offset-lg="3">
 				<accounts-card :accounts="accounts"/>
 			</b-col>
 
-			<b-col cols="12" sm="10" md="8" xl="6" offset-sm="1" offset-md="2" offset-xl="3">
+			<b-col cols="12" sm="10" md="8" lg="6" offset-sm="1" offset-md="2" offset-lg="3">
 				<categories-card :categories="categories" :accounts="accounts"/>
 			</b-col>
 
-			<b-col cols="12" sm="10" md="8" xl="6" offset-sm="1" offset-md="2" offset-xl="3">
+			<b-col cols="12" sm="10" md="8" lg="6" offset-sm="1" offset-md="2" offset-lg="3">
 				<monthlies-card :monthlies="monthlies" :accounts="accounts"/>
 			</b-col>
 		</b-row>

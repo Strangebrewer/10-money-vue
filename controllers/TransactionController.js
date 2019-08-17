@@ -8,6 +8,7 @@ export default {
    async post(req, res) {
       try {
          req.body.user = req.user.id;
+         console.log('req.body:::', req.body);
          const transaction = await TransactionSchema.create(req.body);
          req.body.transaction_id = transaction._id;
          const account = await account_model.calculateNewBalance(req.body);

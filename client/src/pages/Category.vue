@@ -26,11 +26,26 @@
 				</b-col>
 			</b-row>
 		</b-card>
-		<!-- <b-table striped :items="items"></b-table> -->
+
+		<b-form-radio-group
+			v-if="!loading"
+			id="transactions"
+			v-model="display"
+			:options="options"
+			align="center"
+			class="pt-2"
+		></b-form-radio-group>
+
+		<b-table v-if="!loading" striped :items="transactions" :fields="fields">
+			<template slot="amount" scope="row">{{moneyFormat(row.value)}}</template>
+
+			<template slot="date" scope="row">{{dateFormat(row.value, 'MMM DD, YYYY')}}</template>
+		</b-table>
 	</b-container>
 </template>
 
 <script>
+import dateFns from "date-fns";
 import formatMoney from "../utils/formatMoney";
 
 export default {
@@ -39,7 +54,19 @@ export default {
 			category: null,
 			loading: true,
          error: null,
-         fields: []
+         transactions: null,
+			fields: [
+				{ key: "type" },
+				{ key: "amount" },
+				{ key: "date" },
+				{ key: "description" }
+			],
+			display: "all",
+			options: [
+				{ text: "All", value: "all" },
+				{ text: "This Month", value: "month" },
+				{ text: "Thirty Days", value: "thirty" }
+			]
 		};
 	},
 	async created() {
@@ -47,10 +74,13 @@ export default {
 	},
 	methods: {
 		moneyFormat(amount) {
-         console.log("amount:::", amount);
-         const parsed_amount = parseInt(amount);
-         console.log('parsed_amount:::', parsed_amount);
+			console.log("amount:::", amount);
+			const parsed_amount = parseInt(amount);
+			console.log("parsed_amount:::", parsed_amount);
 			return formatMoney(parsed_amount);
+		},
+		dateFormat(date) {
+			return dateFns.format(date, "MMM DD, YYYY");
 		},
 		async getCategory() {
 			try {
@@ -58,14 +88,26 @@ export default {
 				this.loading = false;
 				this.category = this.$store.state.category.current;
 				console.log("this.category:::", this.category);
+				switch (this.display) {
+					case "thirty":
+						this.transactions = this.category.thirty_days;
+						break;
+					case "month":
+						this.transactions = this.category.this_month;
+						break;
+					default:
+						this.transactions = this.category.transactions_all;
+				}
 			} catch (e) {
 				this.loading = false;
 				this.error = e.message;
 			}
 		}
 	},
-	mounted() {
-		console.log("this.category:::", this.category);
+	watch: {
+		display: function() {
+			this.getCategory();
+		}
 	}
 };
 </script>

@@ -5,6 +5,7 @@ import VueLinks from '@/pages/VueLinks';
 import Signup from '@/pages/Signup';
 import Account from '@/pages/Account';
 import Category from '@/pages/Category';
+import Monthly from '@/pages/Monthly';
 
 Vue.use(Router)
 
@@ -36,6 +37,12 @@ export default new Router({
          name: 'category-detail',
          props: true,
          component: Category
+      },
+      {
+         path: '/monthly',
+         name: 'monthly-tallies',
+         props: true,
+         component: Monthly
       }
    ]
 })

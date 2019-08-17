@@ -23,7 +23,9 @@ class Category {
 
       const transactions_month = await transaction_model.transactionsThisMonth(user_id);
       const transactions_30 = await transaction_model.transactionsLast30Days(user_id);
+      const transactions_all = await TransactionSchema.find({ category: req_params.id }).sort({ date: -1});
       const categories = addTransactions(response, 'category', transactions_month, transactions_30);
+      categories[0].transactions_all = transactions_all;
 
       return categories;
    }

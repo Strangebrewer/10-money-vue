@@ -2,8 +2,8 @@ import axios from 'axios'
 
 function API() {
    return axios.create({
-      baseURL: 'http://localhost:3000', // use this at work
-    //   baseURL: 'http://localhost:8080', // use this at home
+      // baseURL: 'http://localhost:3000', // use this at work
+      baseURL: 'http://localhost:8080', // use this at home
       headers: {
          Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -15,6 +15,9 @@ export function APIlogin(credentials) {
 }
 
 export default {
+   getAllData() {
+      return API().get('/users/comprehensive')
+   },
    index(route, id) {
       if (id) return API().get(`/${route}/${id}`)
       return API().get(`/${route}`);

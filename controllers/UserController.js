@@ -12,15 +12,15 @@ const transaction_model = new Transaction(TransactionSchema);
 
 export async function getCurrentUser(req, res) {
    try {
-      const user = await UserSchema.findById(req.user.id)
+      const user = await UserSchema.findById(req.user._id)
          .populate('accounts')
          .populate('monthlies')
          .populate('categories');
 
       const { _id, username, email, first_name, last_name } = user;
 
-      const transactions_month = await transaction_model.transactionsThisMonth(req.user.id);
-      const transactions_30 = await transaction_model.transactionsLast30Days(req.user.id);
+      const transactions_month = await transaction_model.transactionsThisMonth(req.user._id);
+      const transactions_30 = await transaction_model.transactionsLast30Days(req.user._id);
 
       const accounts = addTransactions(user.accounts, 'account', transactions_month, transactions_30);
       const categories = addTransactions(user.categories, 'category', transactions_month, transactions_30);
@@ -31,6 +31,19 @@ export async function getCurrentUser(req, res) {
          transactions_month, accounts, monthlies, categories,
       }
       res.json(userData);
+   } catch (e) {
+      console.log(e);
+      res.status(500).send({
+         error: e.message
+      });
+   }
+}
+
+export async function getAllData(req, res) {
+   try {
+      const transactions = await transaction_model.getMonthlyTransactions(req.user._id);
+      // console.log('transactions:::', transactions);
+      res.json(transactions);
    } catch (e) {
       console.log(e);
       res.status(500).send({

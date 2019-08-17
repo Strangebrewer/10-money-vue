@@ -5,6 +5,7 @@ import monthly from './monthly';
 import category from './category';
 import transaction from './transaction';
 import account from './account';
+import allData from './allData';
 
 Vue.use(Vuex);
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
       monthly,
       category,
       transaction,
-      account
+      account,
+      allData
    }
 });

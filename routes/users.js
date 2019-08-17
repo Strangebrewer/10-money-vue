@@ -9,6 +9,7 @@ router.route('/')
    .put(isAuthenticated, UserController.put);
 
 router.post('/login', UserController.login);
+router.get('/comprehensive', isAuthenticated, UserController.getAllData);
 
 router.route('/:id')
    .put(isAuthenticated, UserController.updatePassword)

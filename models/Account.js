@@ -20,7 +20,7 @@ class Account {
       if (req_params.id) {
          const transactions_month = await transaction_model.transactionsThisMonth(user_id);
          const transactions_30 = await transaction_model.transactionsLast30Days(user_id);
-         const transactions_all = await TransactionSchema.find({ account: req_params.id });
+         const transactions_all = await TransactionSchema.find({ account: req_params.id }).sort({ date: -1});
          accounts = addTransactions(accounts, 'account', transactions_month, transactions_30);
          accounts[0].transactions_all = transactions_all;
       }
