@@ -33,6 +33,14 @@
 
 			<template slot="date" scope="row">{{dateFormat(row.value, 'MMM DD, YYYY')}}</template>
 		</b-table>
+
+      <b-pagination
+         align="center"
+         v-if="!loading"
+         v-model="currentPage"
+         :per-page="perPage"
+         :total-rows="transactionCount"
+      />
 	</b-container>
 </template>
 
@@ -44,21 +52,24 @@ export default {
 	data() {
 		return {
 			account: null,
-			loading: true,
+			display: "all",
 			error: null,
-			transactions: null,
 			fields: [
 				{ key: "type" },
 				{ key: "amount" },
 				{ key: "date" },
 				{ key: "description" }
 			],
-			display: "all",
+			loading: true,
 			options: [
 				{ text: "All", value: "all" },
 				{ text: "This Month", value: "month" },
 				{ text: "Thirty Days", value: "thirty" }
-			]
+         ],
+         perPage: 10,
+         currentPage: 1,
+         transactionCount: 0,
+         transactions: null
 		};
 	},
 	async created() {
@@ -86,7 +97,8 @@ export default {
 						this.transactions = this.account.this_month;
 						break;
 					default:
-						this.transactions = this.account.transactions_all;
+                  this.transactions = this.account.transactions_all;
+                  this.transactionCount = this.transactions.length;
 				}
 			} catch (e) {
 				this.loading = false;
