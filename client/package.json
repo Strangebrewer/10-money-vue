@@ -6,7 +6,7 @@
    "private": true,
    "scripts": {
       "dev": "webpack-dev-server --host 0.0.0.0 --disable-host-check --inline --progress --config build/webpack.dev.conf.js",
-      "prod": "webpack-dev-server --inline --progress --config build/webpack.prod.conf.js",
+      "prod": "webpack-dev-server --host 0.0.0.0 --disable-host-check --inline --progress --config build/webpack.prod.conf.js",
       "start": "if-env NODE_ENV=production && npm run prod || npm run dev",
       "build": "node build/build.js"
    },
