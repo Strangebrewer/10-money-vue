@@ -12,10 +12,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(cors());
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build/webpack.dev.conf.js'));
-} else { app.use(express.static(path.join(__dirname, 'client/build/webpack.prod.conf.js'))); }
-
 app.use(routes);
 
 app.listen(PORT, () => {
