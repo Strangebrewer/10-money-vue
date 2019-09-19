@@ -3,8 +3,9 @@ import axios from 'axios'
 function API() {
    return axios.create({
       // baseURL: 'https://bkashambhala.com',
-      // baseURL: 'http://localhost:3000', // use this at work
-      baseURL: 'http://localhost:8080', // use this at home
+      // baseURL: 'https://167.71.116.62',
+      baseURL: 'http://localhost:3000', // use this at work
+      // baseURL: 'http://localhost:8080', // use this at home
       headers: {
          Authorization: `Bearer ${localStorage.getItem('token')}`
       }
