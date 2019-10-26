@@ -18,10 +18,10 @@ app.use(routes);
 if (process.env.NODE_ENV === 'production') {
    console.log("NODE_ENV does === 'production'");
    // Static folder
-   app.use(express.static(__dirname + './public'));
+   app.use(express.static(__dirname + './client/dist'));
 
    // Handle SPA <--- this note is from the tutorial; what exactly does it mean / what does this do?
-   app.get(/.*/, (req, res) => res.sendFile(__dirname + '.public/index.html'));
+   app.get(/.*/, (req, res) => res.sendFile(__dirname + './client/dist/index.html'));
 }
 
 app.listen(PORT, () => {
