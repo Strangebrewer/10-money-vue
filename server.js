@@ -14,6 +14,10 @@ app.use(cors());
 
 app.use(routes);
 
+if (process.env.NODE_ENV === 'derptown') {
+    console.log("shitbag!");
+}
+
 // Handle production
 if (process.env.NODE_ENV === 'production') {
    console.log("NODE_ENV does === 'production'");
