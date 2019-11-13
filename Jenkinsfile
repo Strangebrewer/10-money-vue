@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        DERP = 'derptown'
+    }
     stages {
         stage('build') {
             steps {
