@@ -8,9 +8,10 @@
       "dev": "webpack-dev-server --host 0.0.0.0 --disable-host-check --inline --progress --config build/webpack.dev.conf.js",
       "prod": "webpack-dev-server --host 0.0.0.0 --disable-host-check --inline --progress --config build/webpack.prod.conf.js",
       "start": "if-env NODE_ENV=production && npm run prod || npm run dev",
-      "build": "node build/build.js"
+      "build": "vue-cli-service build"
    },
    "dependencies": {
+      "@vue/cli-service": "^3.11.0",
       "axios": "^0.19.0",
       "bootstrap": "^4.3.1",
       "bootstrap-vue": "^2.0.0-rc.22",
