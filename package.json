@@ -7,7 +7,7 @@
       "start": "if-env NODE_ENV=production && npm run prod || npm run dev",
       "dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
       "prod": "node index.js",
-      "client": "cd client && npm run serve",
+      "client": "cd client && npm run start",
       "seed": "node seeds/index.js",
       "install": "cd client && npm install",
       "build": "cd client && npm run build"

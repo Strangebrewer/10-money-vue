@@ -33,7 +33,7 @@ export default {
 	data() {
 		return {
             // msg: "Shutcho Ass Up"
-            msg: "Fuckety fuck fuck fuck."
+            msg: "This is a Test."
 		};
    },
    
